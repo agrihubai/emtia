@@ -188,6 +188,20 @@
   .ae-hyp td.ae-hyp-cond { min-width: 16rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
   .ae-hyp td.ae-hyp-last { min-width: 16rem; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
   .ae-hyp td.ae-hyp-status { min-width: 9rem; font-size: var(--cds-font-size-caption); }
+  .ae-hyp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+  .ae-hyp-card { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ae-hyp-card h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .ae-hyp-price { display: block; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .ae-hyp-card .ae-hyp-tag { margin: 0; }
+  .ae-hyp-tag a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 3px; }
+  .ae-hyp-dl { margin: 0; display: grid; grid-template-columns: minmax(7rem, 38%) 1fr; gap: var(--cds-gap-xs) var(--cds-gap-sm); font-size: var(--cds-font-size-caption); line-height: 1.45; }
+  .ae-hyp-dl dt { color: var(--color-fg-muted); }
+  .ae-hyp-dl dd { margin: 0; min-width: 0; }
+  .ae-hyp-num { font-variant-numeric: tabular-nums; }
+  .ae .ae-hyp-strong { font-weight: 600; }
+  .ae-hyp-mirror { color: var(--color-fg); }
+  .ae-hyp-falsify { margin: 0; padding-top: var(--cds-pad-sm); border-top: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  @media (max-width: 30rem) { .ae-hyp-dl { grid-template-columns: 1fr; } .ae-hyp-dl dd { margin-bottom: var(--cds-gap-xs); } }
   .ae-pill { display: inline-block; padding: 1px var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); white-space: nowrap; }
   .ae-pill.is-hit { color: var(--color-ok); border-color: currentColor; }
   .ae-pill.is-partial { color: var(--color-warn); border-color: currentColor; }
@@ -322,8 +336,8 @@
 
   <section class="ae-section ae-card" id="karne">
     <h2 class="ae-h2"><span data-l="tr" lang="tr">Hipotez karnesi</span><span data-l="en" lang="en" hidden>Hypothesis scorecard</span></h2>
-    <p class="ae-note" data-l="tr" lang="tr">AgriHub-AI yazıları tahmin satmaz, ama sınanabilir hipotezler kurar: her birinde bir kontrol tarihi ve "şu olursa yanıldık" diyen bir yanılma koşulu var. Tarihi gelen her hipotez kontrol edilir ve sonucu burada, tuttuysa da tutmadıysa da aynı görünürlükte yazılır. Yalnızca yazıda açık bir yanılma koşulu olan hipotezler listelenir. "Son bilinen değer", eşiğe bugün ne kadar uzak olunduğunu gösterir ve her yeni yazıda güncellenir.</p>
-    <p class="ae-note" data-l="en" lang="en" hidden>AgriHub-AI articles don't sell forecasts, but they set testable hypotheses: each has a check date and a falsification condition that says "if this happens, we were wrong". Every hypothesis is checked when its date comes, and the result is shown here with the same prominence whether it held or not. Only hypotheses with an explicit falsification condition in the article are listed. The "latest known value" shows how far things stand from the threshold today and is updated with each new article.</p>
+    <p class="ae-note" data-l="tr" lang="tr">AgriHub-AI yazıları tahmin satmaz, ama sınanabilir hipotezler kurar: her birinde bir kontrol tarihi ve "şu olursa yanıldık" diyen bir yanılma koşulu var. Tarihi gelen her hipotez kontrol edilir ve sonucu burada, tuttuysa da tutmadıysa da aynı görünürlükte yazılır. Yalnızca yazıda açık bir yanılma koşulu olan hipotezler listelenir. Her kartta ürünün panodaki fiyatı, ölçülen göstergenin son bilinen değeri ve hipotezin beklediği değer aynı birimde yan yana durur. "Bu olursa" satırı yalnızca kaynaklı bir geçmiş örnek varsa yazılır; yapay zekâ fiyat tahmini yapmaz.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>AgriHub-AI articles don't sell forecasts, but they set testable hypotheses: each has a check date and a falsification condition that says "if this happens, we were wrong". Every hypothesis is checked when its date comes, and the result is shown here with the same prominence whether it held or not. Only hypotheses with an explicit falsification condition in the article are listed. Each card shows the product's price on the dashboard, and the latest known value of the measured indicator next to what the hypothesis expects, in the same unit. The "If it happens" line appears only where a sourced past case exists; the AI does not forecast prices.</p>
     <div class="ae-score" data-source="scorecard">
       <span class="ae-score-item"><b data-draw="sc-hit" data-source="scorecard" data-field="hit" class="dash-skeleton">—</b><span data-l="tr" lang="tr">tuttu</span><span data-l="en" lang="en" hidden>held</span></span>
       <span class="ae-score-item"><b data-draw="sc-partial" data-source="scorecard" data-field="partial" class="dash-skeleton">—</b><span data-l="tr" lang="tr">kısmen</span><span data-l="en" lang="en" hidden>partly</span></span>
@@ -332,20 +346,7 @@
       <span class="ae-score-item"><b data-draw="sc-pending" data-source="scorecard" data-field="pending" class="dash-skeleton">—</b><span data-l="tr" lang="tr">bekliyor</span><span data-l="en" lang="en" hidden>pending</span></span>
     </div>
     <p class="ae-score-rate" data-draw="sc-rate" data-source="scorecard" data-field="rate">—</p>
-    <div class="ae-tablewrap">
-      <table class="ae-table ae-hyp" data-source="hypotheses" data-row-key="id">
-        <thead>
-          <tr>
-            <th data-field="due"><span data-l="tr" lang="tr">Kontrol tarihi</span><span data-l="en" lang="en" hidden>Check date</span></th>
-            <th data-field="claim"><span data-l="tr" lang="tr">Hipotez</span><span data-l="en" lang="en" hidden>Hypothesis</span></th>
-            <th data-field="cond"><span data-l="tr" lang="tr">Yanılma koşulu</span><span data-l="en" lang="en" hidden>Falsification condition</span></th>
-            <th data-field="last"><span data-l="tr" lang="tr">Son bilinen değer</span><span data-l="en" lang="en" hidden>Latest known value</span></th>
-            <th data-field="status"><span data-l="tr" lang="tr">Durum</span><span data-l="en" lang="en" hidden>Status</span></th>
-          </tr>
-        </thead>
-        <tbody data-draw="hyprows"></tbody>
-      </table>
-    </div>
+    <div class="ae-hyp-grid" data-draw="hyprows" data-source="hypotheses summary"></div>
   </section>
 
   <section class="ae-section" id="yontem">
@@ -730,46 +731,61 @@
     }
   });
 
-  dash.draw('hyprows', (tbody) => {
+  dash.draw('hyprows', (grid) => {
     const g = dash.data('hypotheses');
-    tbody.replaceChildren();
+    const sg = dash.data('summary');
+    grid.replaceChildren();
     if (g.status !== 'ok') return;
     const en = AE.lang() === 'en';
+    const sum = {};
+    if (sg.status === 'ok') for (const r of sg.data) sum[r.series] = r;
     const label = {
       pending: en ? 'Pending' : 'Bekliyor', hit: en ? 'Held' : 'Tuttu', partial: en ? 'Partly' : 'Kısmen',
       miss: en ? 'Failed' : 'Tutmadı', nodata: en ? 'No data' : 'Veri çıkmadı',
     };
+    const L = en
+      ? { metric: 'What is measured', last: 'Latest known value', expect: 'What the hypothesis expects', due: 'Check date', reason: 'Why', mirror: 'If it happens: a past case', falsify: 'Falsification condition', exp: 'Expected: ' }
+      : { metric: 'Ne ölçülüyor', last: 'Son bilinen değer', expect: 'Hipotezin beklediği', due: 'Kontrol tarihi', reason: 'Neden', mirror: 'Bu olursa: geçmişte benzer durumda', falsify: 'Yanılma koşulu', exp: 'Beklenen: ' };
     const items = g.data.slice().sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
     for (const h of items) {
-      const tr = document.createElement('tr');
-      tr.dataset.key = h.id;
-      const td = (cls) => { const c = document.createElement('td'); c.className = cls; tr.append(c); return c; };
-      td('ae-hyp-due').textContent = AE.due(h);
-      const c2 = td('ae-hyp-claim');
-      c2.append(document.createTextNode(AE.tx(h, 'claim')));
-      const tag = document.createElement('span'); tag.className = 'ae-hyp-tag';
+      const c = document.createElement('article'); c.className = 'ae-hyp-card'; c.dataset.key = h.id;
+      const head = document.createElement('div'); head.className = 'ae-life-head';
+      const left = document.createElement('div');
+      const name = document.createElement('h3');
+      const s = h.series ? sum[h.series] : null;
+      name.textContent = s ? AE.name(s) : AE.tx(h, 'product');
+      left.append(name);
+      if (s) {
+        const pr = document.createElement('span'); pr.className = 'ae-hyp-price';
+        pr.append(document.createTextNode(`${AE.num(s.latest)} ${AE.unit(s)} · ${AE.monthShort(new Date(s.date))} · ${en ? '12 months' : '12 ay'} `));
+        const ch = document.createElement('span'); ch.textContent = AE.pct(s.y1); AE.tone(ch, s.y1); pr.append(ch);
+        left.append(pr);
+      }
+      const pill = document.createElement('span');
+      const st = label[h.status] ? h.status : 'pending';
+      pill.className = 'ae-pill is-' + st; pill.textContent = label[st];
+      head.append(left, pill);
+      c.append(head);
+      const tag = document.createElement('p'); tag.className = 'ae-hyp-tag';
       if (/^https:\/\/agrihubai\.wordpress\.com\//.test(h.post_url || '')) {
-        const a = document.createElement('a');
-        a.href = h.post_url + (en ? '#english' : ''); a.target = '_blank'; a.rel = 'noopener';
-        a.textContent = AE.tx(h, 'post');
-        tag.append(a);
+        const a = document.createElement('a'); a.href = h.post_url + (en ? '#english' : ''); a.target = '_blank'; a.rel = 'noopener'; a.textContent = AE.tx(h, 'post'); tag.append(a);
       } else tag.textContent = AE.tx(h, 'post');
       if (h.interim === true || h.interim === 'true') tag.append(document.createTextNode(en ? ' · interim check' : ' · ara kontrol'));
-      c2.append(tag);
-      td('ae-hyp-cond').textContent = AE.tx(h, 'cond');
-      const cl = td('ae-hyp-last');
-      cl.append(document.createTextNode(AE.tx(h, 'last') || '—'));
-      if (h.last_src) { const sp = document.createElement('span'); sp.className = 'ae-hyp-tag'; sp.textContent = (en ? 'Source: ' : 'Kaynak: ') + h.last_src; cl.append(sp); }
-      const c4 = td('ae-hyp-status');
-      const pill = document.createElement('span');
-      pill.className = 'ae-pill is-' + (label[h.status] ? h.status : 'pending');
-      pill.textContent = label[h.status] || label.pending;
-      c4.append(pill);
-      const sub = document.createElement('span'); sub.className = 'ae-hyp-sub';
-      if (h.status === 'pending' || !label[h.status]) sub.textContent = (en ? 'Expected: ' : 'Beklenen: ') + AE.due(h);
-      else sub.textContent = AE.tx(h, 'note');
-      if (sub.textContent) c4.append(sub);
-      tbody.append(tr);
+      c.append(tag);
+      const dl = document.createElement('dl'); dl.className = 'ae-hyp-dl';
+      const row = (k, v, cls) => { if (!v) return; const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; if (cls) dd.className = cls; dl.append(dt, dd); };
+      row(L.metric, AE.tx(h, 'metric'));
+      row(L.last, AE.tx(h, 'last'), 'ae-hyp-num');
+      row(L.expect, AE.tx(h, 'expect'), 'ae-hyp-num ae-hyp-strong');
+      row(L.due, (st === 'pending' ? L.exp : '') + AE.due(h) + (st !== 'pending' && AE.tx(h, 'note') ? ' · ' + AE.tx(h, 'note') : ''));
+      row(L.reason, AE.tx(h, 'reason'));
+      const m = AE.tx(h, 'mirror');
+      row(L.mirror, m ? m + (h.mirror_src ? (en ? ' (Source: ' : ' (Kaynak: ') + h.mirror_src + ')' : '') : '', 'ae-hyp-mirror');
+      c.append(dl);
+      const f = document.createElement('p'); f.className = 'ae-hyp-falsify';
+      f.textContent = L.falsify + ': ' + AE.tx(h, 'cond');
+      c.append(f);
+      grid.append(c);
     }
   });
 </script>
