@@ -1,0 +1,214 @@
+[
+{
+"series": "rule-farm",
+"where": "Çiftçinin payı küçük",
+"where_en": "The farmer's share is small",
+"fact": "ABD'de gıdaya harcanan her 1 doların 11,8 senti çiftliğe gidiyor (2024). Gerisi işleme, ambalaj, taşıma, enerji ve satışın payı. Bu yüzden ham madde fiyatı ikiye katlansa bile raf fiyatı ikiye katlanmaz.",
+"fact_en": "In the US, 11.8 cents of every food dollar goes to the farm (2024). The rest pays for processing, packaging, transport, energy and retail. So even if a raw material's price doubles, the shelf price does not.",
+"sources": [
+{
+"name": "USDA ERS Food Dollar (2024)",
+"url": "https://www.ers.usda.gov/data-products/food-dollar-series/quick-facts"
+}
+]
+},
+{
+"series": "rule-processing",
+"where": "Az işlenen ürün daha çok etkilenir",
+"where_en": "Less processed foods feel it more",
+"fact": "Ürün ne kadar az işlenirse ham madde fiyatı rafa o kadar çok yansır. ABD'de sığır etinde toptan fiyat değişiminin %19–29'u rafa geçerken ekmekte un fiyatındaki değişimin %16–21'i geçiyor (2000–2008).",
+"fact_en": "The less processed a food is, the more its raw material price reaches the shelf. In the US, 19–29% of a wholesale beef price change reaches retail, against 16–21% of a flour price change for bread (2000–2008).",
+"sources": [
+{
+"name": "USDA ERS (2011)",
+"url": "https://www.ers.usda.gov/amber-waves/2011/june/food-commodity-cost-pass-through"
+}
+]
+},
+{
+"series": "rule-lag",
+"where": "Ne kadar gecikerek? Ortalama 6–12 ay",
+"where_en": "How late? 6–12 months on average",
+"fact": "IMF'ye göre dünya gıda fiyatlarındaki bir değişimin ülke içi gıda enflasyonuna tam yansıması ortalama 6–12 ay sürüyor ve değişimin ortalama dörtte biri kadarı yansıyor. Gıdada ithalata bağımlı, para birimi zayıf ülkelerde yansıma daha hızlı ve daha büyük. Euro bölgesinde etki yaklaşık 12. ayda zirve yapıyor (1997–2023 verisi). Ürüne göre süre değişiyor: ABD'de un fiyatındaki değişim ekmeğe çoğunlukla 2–4 ayda, sığır etindeki düşüşler 2 ay içinde, çiğ kahvedeki kalıcı değişimler birkaç çeyrekte geçiyor; sert artışlar ise ilk ay içinde rafa çıkabiliyor.",
+"fact_en": "According to the IMF, a change in world food prices takes 6–12 months on average to be fully reflected in domestic food inflation, and on average about a quarter of the change passes through. Pass-through is faster and larger in import-dependent countries with weaker currencies. In the euro area the effect peaks after about 12 months (1997–2023 data). Timing varies by product: in the US, a change in flour prices mostly reaches bread in 2–4 months, beef price falls pass through within 2 months, and lasting changes in green coffee over several quarters; sharp increases can reach the shelf within the first month.",
+"sources": [
+{
+"name": "IMF, Global Food Crisis Update (2023)",
+"url": "https://www.imf.org/-/media/files/publications/imf-notes/2023/english/insea2023002.pdf.md"
+},
+{
+"name": "Banco de España, Borrallo vd. (2023)",
+"url": "https://www.bde.es/f/webpi/SES/staff/perezjavier/files/AEL_Food_price_shocks.pdf"
+},
+{
+"name": "USDA ERS (2011)",
+"url": "https://www.ers.usda.gov/amber-waves/2011/june/food-commodity-cost-pass-through"
+},
+{
+"name": "USDA ERS (2007)",
+"url": "https://www.ers.usda.gov/publications/45774"
+}
+],
+"lag_min": 6,
+"lag_max": 12
+},
+{
+"series": "wheat",
+"where": "Ekmek, makarna, bulgur, simit, bisküvi. Dünya buğdayının yaklaşık beşte biri de hayvan yemine gidiyor (FAO, 2011/12).",
+"where_en": "Bread, pasta, bulgur, biscuits. About a fifth of the world's wheat also goes to animal feed (FAO, 2011/12).",
+"fact": "İngiltere'de 2021'de buğday, 800 gramlık bir ekmeğin maliyetinin tahminen %11'iydi; 1797 Londra'sında bu pay %80'di. Güney Afrika'da 2008–2013'te buğdayın ekmek fiyatındaki payı %13–18 arasındaydı. ABD'de toptan un fiyatındaki değişimin yalnızca %16–21'i ekmek rafına geçti, çoğu 2–4 ay sonra.",
+"fact_en": "In the UK in 2021, wheat was an estimated 11% of the cost of an 800 g loaf; in London in 1797 it was 80%. In South Africa, wheat made up 13–18% of the bread price in 2008–2013. In the US, only 16–21% of a change in wholesale flour prices reached the bread shelf, mostly 2–4 months later.",
+"sources": [
+{
+"name": "Bank of England, A. Bailey (Kasım 2023)",
+"url": "https://www.bankofengland.co.uk/-/media/boe/files/speech/2023/november/a-measure-of-wheat-for-a-penny-speech-by-andrew-bailey.pdf"
+},
+{
+"name": "Grain SA (2014)",
+"url": "https://www.grainsa.co.za/what-is-a-wheat-producer-s-percentage-share-of-retail-white-bread"
+},
+{
+"name": "USDA ERS (2011)",
+"url": "https://www.ers.usda.gov/amber-waves/2011/june/food-commodity-cost-pass-through"
+},
+{
+"name": "FAO / Feedipedia (2013)",
+"url": "https://feedipedia.org/content/world-cereal-use-animal-feeding"
+}
+]
+},
+{
+"series": "maize",
+"where": "Tavuk, yumurta ve süt (yem üzerinden), nişasta, glikoz ve fruktoz şurubu, cips; ABD'de benzine katılan etanol.",
+"where_en": "Chicken, eggs and milk (through feed), starch, glucose and fructose syrup, crisps; in the US, ethanol blended into petrol.",
+"fact": "Mısırın dahil olduğu kaba tahılların yarısından fazlası (2011/12'de %54) hayvan yemine gidiyor. Mısır fiyatı bu yüzden çoğu zaman et ve yumurta fiyatından okunur.",
+"fact_en": "More than half of coarse grains, which include maize, went to animal feed (54% in 2011/12). That is why the maize price often shows up in meat and egg prices.",
+"sources": [
+{
+"name": "FAO / Feedipedia (2013)",
+"url": "https://feedipedia.org/content/world-cereal-use-animal-feeding"
+}
+]
+},
+{
+"series": "rice",
+"where": "Pilav, pirinç unu ve pirinç sütü, bebek mamaları; Asya ve Afrika'da milyarlarca insanın temel gıdası.",
+"where_en": "Rice dishes, rice flour and rice milk, baby foods; a staple food for billions of people in Asia and Africa.",
+"fact": "",
+"fact_en": "",
+"sources": []
+},
+{
+"series": "soy",
+"where": "Tavuk, yumurta, domuz eti ve çiftlik balığı (yem üzerinden), soya yağı, margarin, tofu, soya sütü.",
+"where_en": "Chicken, eggs, pork and farmed fish (through feed), soybean oil, margarine, tofu, soy milk.",
+"fact": "Dünya soyasının yaklaşık %77'si hayvan yemine gidiyor; tofu, tempeh ve soya sütüne giden pay yaklaşık %7 (2017–2019 ortalaması). Soyayı en çok tabaktaki tavuk ve yumurtada tüketiyoruz.",
+"fact_en": "About 77% of the world's soybeans go to animal feed; tofu, tempeh and soy milk take about 7% (2017–2019 average). Most soy is eaten as chicken and eggs.",
+"sources": [
+{
+"name": "Our World in Data, Databoks aracılığıyla (2022)",
+"url": "https://databoks.katadata.co.id/en/agroindustry/statistics/bce530248aa9d8f/soybeans-are-largely-used-for-animal-feed-not-processed-into-tofu-and-tempeh"
+}
+]
+},
+{
+"series": "palm",
+"where": "Margarin, bisküvi, çikolata kaplamalar, hazır erişte, dondurma; sabun, şampuan ve kozmetik; biyodizel.",
+"where_en": "Margarine, biscuits, chocolate coatings, instant noodles, ice cream; soap, shampoo and cosmetics; biodiesel.",
+"fact": "\"Marketteki ürünlerin yarısında palm yağı var\" bilgisi çok yaygın. Ama 2025'te Hollanda, İngiltere ve Avustralya'daki üç süpermarkette yaklaşık 1.600 gıda ürününü inceleyen bir çalışma palm yağını açıkça ürünlerin yalnızca %8'inin etiketinde buldu. Adı belirtilmemiş bitkisel yağlar da sayılınca oran en fazla %40'a çıkabiliyor.",
+"fact_en": "The claim that \"half of supermarket products contain palm oil\" is widely repeated. But a 2025 study of about 1,600 food products in three supermarkets in the Netherlands, the UK and Australia found palm oil explicitly listed on only 8% of labels. Counting unspecified vegetable oils, the share could reach at most 40%.",
+"sources": [
+{
+"name": "Meijaard vd. (2025), WUR",
+"url": "https://research.wur.nl/en/publications/does-palm-oil-really-rule-the-supermarket-an-assessment-of-three-/"
+},
+{
+"name": "OFI Magazine (Ekim 2025)",
+"url": "https://www.ofimagazine.com/news/new-study-finds-palm-oil-not-in-50-of-supermarket-products"
+}
+]
+},
+{
+"series": "sunoil",
+"where": "Kızartma ve yemeklik yağ, margarin, cips, mayonez ve hazır gıdalar.",
+"where_en": "Frying and cooking oil, margarine, crisps, mayonnaise and ready meals.",
+"fact": "",
+"fact_en": "",
+"sources": []
+},
+{
+"series": "olive",
+"where": "Şişede zeytinyağı, zeytinyağlı yemekler, konserve ve hazır mezeler. Zeytinyağı neredeyse işlenmeden satıldığı için ham madde fiyatı rafa ekmeğe göre daha doğrudan yansıyabilir (genel kural için yukarıya bakın).",
+"where_en": "Bottled olive oil, olive-oil dishes, canned goods and ready meze. Because olive oil is sold almost unprocessed, the raw price can reach the shelf more directly than in bread (see the general rule above).",
+"fact": "",
+"fact_en": "",
+"sources": []
+},
+{
+"series": "sugar",
+"where": "Şekerli içecekler, tatlı ve şekerleme, bisküvi, reçel; Brezilya'da şeker kamışından etanol.",
+"where_en": "Soft drinks, sweets and confectionery, biscuits, jam; in Brazil, ethanol from sugarcane.",
+"fact": "",
+"fact_en": "",
+"sources": []
+},
+{
+"series": "arabica",
+"where": "Filtre kahve, espresso ve kapsül kahvelerin çoğu.",
+"where_en": "Most filter coffee, espresso and capsule coffee.",
+"fact": "ABD'de çiğ kahve fiyatındaki %10'luk bir değişim, raf fiyatını yaklaşık %3 değiştiriyor; kalıcı değişimler birkaç çeyrekte yansıyor.",
+"fact_en": "In the US, a 10% change in the green coffee price changes the retail price by about 3%; lasting changes pass through over several quarters.",
+"sources": [
+{
+"name": "USDA ERS (2007)",
+"url": "https://www.ers.usda.gov/publications/45774"
+}
+]
+},
+{
+"series": "cocoa",
+"where": "Çikolata, kakaolu bisküvi ve içecekler, dondurma; kakao yağı kozmetikte de kullanılır.",
+"where_en": "Chocolate, cocoa biscuits and drinks, ice cream; cocoa butter is also used in cosmetics.",
+"fact": "Şubat 2026'da kakao fiyatı bir yıl öncesine göre yaklaşık %70 düşmüşken ABD'de çikolatanın raf fiyatı yıl başından Şubat başına kadar bir yıl öncesine göre %14 yükseldi: ham maddedeki düşüş rafa geç ulaşıyor. Kakao çiftçisine ise bir ton kakaonun çikolataya dönüşene kadar kazandığı toplam değerin %6,6'sından azı kalıyor.",
+"fact_en": "In February 2026 cocoa was about 70% cheaper than a year earlier, yet US chocolate shelf prices from 1 January to early February were 14% higher than a year before: falls in the raw material reach the shelf late. Cocoa farmers receive less than 6.6% of the total value added to a tonne of cocoa on its way to chocolate.",
+"sources": [
+{
+"name": "AP / PBS NewsHour (Şubat 2026)",
+"url": "https://www.pbs.org/newshour/economy/roses-are-red-violets-are-blue-if-cocoa-is-cheaper-why-isnt-chocolate-too"
+},
+{
+"name": "Cocoa Barometer, UNCTAD (2016)",
+"url": "https://unctad.org/press-material/report-cocoa-industry-reform-needed-stop-farmers-being-left-behind"
+}
+]
+},
+{
+"series": "beef",
+"where": "Kırmızı et, kıyma, sucuk ve şarküteri; deri.",
+"where_en": "Red meat, mince, sausages and cured meats; leather.",
+"fact": "ABD'de toptan sığır eti fiyatındaki değişimin %19–29'u rafa geçiyor (2000–2008 verisi); fiyat düşüşlerinin çoğu 2 ay içinde yansıyor.",
+"fact_en": "In the US, 19–29% of a change in wholesale beef prices reaches the shelf (2000–2008 data); most price falls pass through within 2 months.",
+"sources": [
+{
+"name": "USDA ERS (2011)",
+"url": "https://www.ers.usda.gov/amber-waves/2011/june/food-commodity-cost-pass-through"
+}
+]
+},
+{
+"series": "salmon",
+"where": "Taze ve füme somon, suşi. Somon yemi ile omega-3 takviyeleri aynı ham maddeyi, balık yağını kullanır (bkz. Günlük #5).",
+"where_en": "Fresh and smoked salmon, sushi. Salmon feed and omega-3 supplements use the same raw material, fish oil (see Journal #5).",
+"fact": "",
+"fact_en": "",
+"sources": []
+},
+{
+"series": "fert",
+"where": "Raflarda doğrudan görünmez: buğdaydan sebzeye neredeyse her ürünün üretim maliyetinde yer alır. Gübre fiyatındaki değişim önce çiftçinin gübre kararına, sonra hasada, oradan da gıda fiyatlarına aylar sonra ulaşır (bkz. Kükürt ve Rekor Hasat yazıları).",
+"where_en": "Never seen on the shelf: it is part of the cost of producing almost every crop, from wheat to vegetables. A change in fertilizer prices reaches farmers' decisions first, then the harvest, and food prices months later (see the Sulphur and Record Harvest articles).",
+"fact": "",
+"fact_en": "",
+"sources": []
+}
+]

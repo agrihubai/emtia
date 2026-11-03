@@ -1,0 +1,765 @@
+<meta name="dash-one-writer">
+<style>
+  /* Layout: dil düğmesi + başlık + giriş + özet satırı, 4 gösterge kartı, ürün tablosu, karşılaştırma grafiği, yöntem notları */
+  .ae { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); max-width: 72rem; margin-inline: auto; }
+  .ae-head { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .ae-toprow { display: flex; justify-content: space-between; align-items: center; gap: var(--cds-gap-md); flex-wrap: wrap; }
+  .ae-eyebrow { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+  .ae-title { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; text-wrap: balance; }
+  .ae-intro { margin: 0; max-width: 46rem; font-size: var(--cds-font-size-body); line-height: 1.6; color: var(--color-fg-muted); }
+  .ae-lede { margin: var(--cds-gap-xs) 0 0; padding-top: var(--cds-pad-sm); border-top: 1px solid var(--color-border-line); max-width: 46rem; font-size: var(--cds-font-size-body); line-height: 1.55; color: var(--color-fg); }
+  .ae .ae-lede b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .ae-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--cds-gap-md); }
+  .ae-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+  .ae-tile { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+  .ae-tile-label { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ae-tile-value { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.1; font-variant-numeric: tabular-nums; min-height: 1.1em; overflow-wrap: anywhere; }
+  .ae-tile-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .ae .ae-tile-sub b { font-weight: 600; }
+
+  .ae-section { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+  .ae-h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .ae-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.5; max-width: 52rem; }
+
+  .ae-up { color: var(--color-ok); }
+  .ae-down { color: var(--color-bad); }
+
+  .ae-tablewrap { overflow-x: auto; }
+  .ae-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+  .ae-table th { text-align: right; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ae-table th:first-child, .ae-table td:first-child, .ae-table .ae-l { text-align: left; }
+  .ae-table th button { all: unset; cursor: pointer; display: inline-flex; gap: .25em; align-items: center; }
+  .ae-table th button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; border-radius: 2px; }
+  .ae-table th[aria-sort=ascending] button::after { content: "▲"; font-size: .7em; }
+  .ae-table th[aria-sort=descending] button::after { content: "▼"; font-size: .7em; }
+  .ae-table td { text-align: right; padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ae-table tbody tr { cursor: pointer; }
+  .ae-table tbody tr:hover td { background: var(--cds-surface-popover); }
+  .ae-table tbody tr.is-on td:first-child { box-shadow: inset 3px 0 0 var(--ae-swatch, var(--color-fg)); }
+  .ae-table td.ae-unit { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ae-table td a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 3px; }
+  .ae-table td a:hover { text-decoration-color: currentColor; }
+  @media (max-width: 40rem) { .ae-col-hide { display: none; } }
+
+  .ae-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; }
+  .ae-chip { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+  .ae-chip[aria-pressed=true] { color: var(--color-fg); border-color: var(--color-fg); }
+  .ae-chip:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .ae-seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); overflow: hidden; }
+  .ae-seg button { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 0; background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+  .ae-seg button[aria-pressed=true] { background: var(--color-fg); color: var(--color-bg); }
+  .ae-seg button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: -2px; }
+
+  .ae-chart { position: relative; min-height: 340px; }
+  .ae-chart svg { display: block; overflow: visible; }
+  .ae-chart text { font-family: var(--font-anthropic-sans); }
+  .ae-tip { position: absolute; top: 0; left: 0; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); pointer-events: none; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ae-tip-date { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .ae-tip-row { display: flex; gap: var(--cds-gap-xs); align-items: center; }
+  .ae-tip-sw { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+  .ae-tip-v { margin-left: auto; padding-left: var(--cds-pad-sm); }
+
+  .ae-score { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-lg); align-items: baseline; font-variant-numeric: tabular-nums; }
+  .ae-score-item { display: inline-flex; gap: var(--cds-gap-xs); align-items: baseline; font-size: var(--cds-font-size-body); }
+  .ae .ae-score-item b { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-heading); }
+  .ae-score-rate { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ae-hyp td { white-space: normal; vertical-align: top; text-align: left; line-height: 1.45; }
+  .ae-hyp th { text-align: left; }
+  .ae-hyp tbody tr { cursor: default; }
+  .ae-hyp td.ae-hyp-due { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ae-hyp td.ae-hyp-claim { min-width: 14rem; }
+  .ae-hyp td.ae-hyp-cond { min-width: 16rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ae-hyp td.ae-hyp-status { min-width: 9rem; font-size: var(--cds-font-size-caption); }
+  .ae-pill { display: inline-block; padding: 1px var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); white-space: nowrap; }
+  .ae-pill.is-hit { color: var(--color-ok); border-color: currentColor; }
+  .ae-pill.is-partial { color: var(--color-warn); border-color: currentColor; }
+  .ae-pill.is-miss { color: var(--color-bad); border-color: currentColor; }
+  .ae-pill.is-pending { color: var(--color-fg-muted); }
+  .ae-hyp-sub { display: block; margin-top: 2px; color: var(--color-fg-muted); }
+  .ae-hyp-tag { display: block; margin-top: 2px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ae-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-md); }
+  .ae-rule { border-left: 2px solid var(--color-border-line); padding-left: var(--cds-pad-md); display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+  .ae-rule h3, .ae-life h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .ae-rule p, .ae-life p { margin: 0; font-size: var(--cds-font-size-caption); line-height: 1.55; }
+  .ae-life-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--cds-gap-md); }
+  .ae-life { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ae-life-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--cds-gap-sm); }
+  .ae-life-chg { font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ae-life-k { display: block; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: 2px; }
+  .ae-life-fact { padding-top: var(--cds-pad-sm); border-top: 1px solid var(--color-border-line); }
+  .ae .ae-rule-when { padding: var(--cds-pad-xs) var(--cds-pad-sm); background: var(--cds-surface-popover); border-radius: var(--cds-radius); color: var(--color-fg); }
+  .ae-src { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ae-src a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 3px; }
+  .ae-src a:hover { text-decoration-color: currentColor; }
+  .ae-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--cds-gap-md); }
+  .ae-notes h3 { margin: 0 0 var(--cds-gap-xs); font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .ae-notes p { margin: 0; font-size: var(--cds-font-size-caption); line-height: 1.55; color: var(--color-fg-muted); }
+
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="ae">
+  <header class="ae-head" id="ozet">
+    <div class="ae-toprow">
+      <p class="ae-eyebrow"><span data-l="tr" lang="tr">AgriHub-AI · Aylık küresel emtia fiyatları</span><span data-l="en" lang="en" hidden>AgriHub-AI · Monthly global commodity prices</span></p>
+      <div class="ae-seg ae-lang" role="group" aria-label="Dil / Language">
+        <button type="button" data-lang="tr" lang="tr">TR</button>
+        <button type="button" data-lang="en" lang="en">EN</button>
+      </div>
+    </div>
+    <h1 class="ae-title"><span data-l="tr" lang="tr">AgriHub-AI Emtia Endeksi</span><span data-l="en" lang="en" hidden>AgriHub-AI Commodity Index</span></h1>
+
+    <p class="ae-intro" data-l="tr" lang="tr">AgriHub-AI yazıları, tarım verisinde gözden kaçanı arar. Ama bir kör noktayı görmek için önce herkesin gördüğü resmi bilmek gerekir: Bir ürünün fiyatı bugün nerede? Bu pano o resmi verir.</p>
+    <p class="ae-intro" data-l="tr" lang="tr">Panoda, AgriHub-AI yazılarında ele alınan ürünlerin IMF'nin her ay yayımladığı dünya fiyatları var. Her ürünün son fiyatı, bir yıl önceki fiyatıyla ve kendi 2015–2024 ortalamasıyla karşılaştırılır (ortalama = 100). Tablodaki bağlantı, o fiyatın arkasında neyin gözden kaçtığını anlatan yazıya götürür. Kısacası pano fiyatın ne olduğunu, yazı fiyatın neyi göstermediğini anlatır. Yeni yazılarla pano da genişler.</p>
+    <p class="ae-intro" data-l="en" lang="en" hidden>AgriHub-AI articles look for what agricultural data misses. But to see a blind spot, you first need the picture everyone sees: where is a product's price today? This dashboard gives that picture.</p>
+    <p class="ae-intro" data-l="en" lang="en" hidden>It shows the IMF's monthly world prices for the products covered in AgriHub-AI articles. Each product's latest price is compared with its price a year earlier and with its own 2015–2024 average (average = 100). The link in the table leads to the article on what lies behind that price. In short, the dashboard shows what the price is, and the article shows what the price doesn't. The dashboard grows with each new article.</p>
+
+    <p class="ae-lede" data-l="tr" lang="tr">Son veri ayı <b data-draw="lastmonth" data-source="summary" data-field="date" data-where="series=food" class="dash-skeleton">—</b>. IMF gıda fiyat endeksi bir yıl öncesine göre <b data-draw="foody1" data-source="summary" data-field="y1" data-where="series=food" class="dash-skeleton">—</b> değişti. Şimdiye kadar panoda incelenen <b data-draw="abovetotal" data-source="above" data-field="total" class="dash-skeleton">—</b> ürünün <b data-draw="abovecount" data-source="above" data-field="n" class="dash-skeleton">—</b> tanesinin fiyatı 2015–2024 ortalamasının üstünde.</p>
+    <p class="ae-lede" data-l="en" lang="en" hidden>Latest data: <b data-draw="lastmonth" data-source="summary" data-field="date" data-where="series=food" class="dash-skeleton">—</b>. The IMF food price index changed by <b data-draw="foody1" data-source="summary" data-field="y1" data-where="series=food" class="dash-skeleton">—</b> year on year. Of the <b data-draw="abovetotal" data-source="above" data-field="total" class="dash-skeleton">—</b> products covered on the dashboard so far, <b data-draw="abovecount" data-source="above" data-field="n" class="dash-skeleton">—</b> are priced above their 2015–2024 average.</p>
+  </header>
+
+  <section class="ae-tiles" id="gostergeler" aria-label="Göstergeler / Indicators">
+    <div class="ae-card ae-tile" id="kart-gida">
+      <p class="ae-tile-label"><span data-l="tr" lang="tr">IMF gıda fiyat endeksi (2016 = 100)</span><span data-l="en" lang="en" hidden>IMF food price index (2016 = 100)</span></p>
+      <p class="ae-tile-value dash-skeleton" data-draw="foodlatest" data-source="summary" data-field="latest" data-where="series=food">—</p>
+      <p class="ae-tile-sub"><span data-l="tr" lang="tr">12 ayda</span><span data-l="en" lang="en" hidden>12 months:</span> <b data-draw="foody1b" data-source="summary" data-field="y1" data-where="series=food">—</b></p>
+    </div>
+    <div class="ae-card ae-tile" id="kart-gubre">
+      <p class="ae-tile-label"><span data-l="tr" lang="tr">Gübre, ABD üretici fiyatı · 12 aylık değişim</span><span data-l="en" lang="en" hidden>Fertilizer, US producer price · 12-month change</span></p>
+      <p class="ae-tile-value dash-skeleton" data-draw="perty1" data-source="summary" data-field="y1" data-where="series=fert">—</p>
+      <p class="ae-tile-sub"><span data-l="tr" lang="tr">Endeks (1982 = 100):</span><span data-l="en" lang="en" hidden>Index (1982 = 100):</span> <b data-draw="fertlatest" data-source="summary" data-field="latest" data-where="series=fert">—</b></p>
+    </div>
+    <div class="ae-card ae-tile" id="kart-artan">
+      <p class="ae-tile-label"><span data-l="tr" lang="tr">12 ayda en çok artan</span><span data-l="en" lang="en" hidden>Biggest 12-month rise</span></p>
+      <p class="ae-tile-value dash-skeleton" data-draw="upname" data-source="extremes" data-field="name" data-where="which=up">—</p>
+      <p class="ae-tile-sub"><b data-draw="upval" data-source="extremes" data-field="y1" data-where="which=up">—</b></p>
+    </div>
+    <div class="ae-card ae-tile" id="kart-dusen">
+      <p class="ae-tile-label"><span data-l="tr" lang="tr">12 ayda en çok düşen</span><span data-l="en" lang="en" hidden>Biggest 12-month fall</span></p>
+      <p class="ae-tile-value dash-skeleton" data-draw="downname" data-source="extremes" data-field="name" data-where="which=down">—</p>
+      <p class="ae-tile-sub"><b data-draw="downval" data-source="extremes" data-field="y1" data-where="which=down">—</b></p>
+    </div>
+  </section>
+
+  <section class="ae-section ae-card" id="urunler">
+    <h2 class="ae-h2"><span data-l="tr" lang="tr">Ürün tablosu</span><span data-l="en" lang="en" hidden>Product table</span></h2>
+    <p class="ae-note" data-l="tr" lang="tr">Aylık ortalama dünya fiyatları. "10 yıl ort." sütunu son fiyatın 2015–2024 ortalamasından yüzde kaç uzakta olduğunu gösterir. Bir satıra tıklayınca ürün aşağıdaki grafiğe eklenir ya da çıkarılır; başlıklara tıklayınca tablo sıralanır.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>Monthly average world prices. The "vs 10-yr avg" column shows how far the latest price is from its 2015–2024 average. Click a row to add the product to the chart below or remove it; click a column heading to sort.</p>
+    <div class="ae-tablewrap">
+      <table class="ae-table" data-source="summary" data-row-key="series">
+        <thead>
+          <tr>
+            <th data-field="name"><button type="button" data-sort="name"><span data-l="tr" lang="tr">Ürün</span><span data-l="en" lang="en" hidden>Product</span></button></th>
+            <th data-field="latest"><button type="button" data-sort="latest"><span data-l="tr" lang="tr">Son fiyat</span><span data-l="en" lang="en" hidden>Latest price</span></button></th>
+            <th data-field="unit" class="ae-l ae-col-hide"><button type="button" data-sort="unit"><span data-l="tr" lang="tr">Birim</span><span data-l="en" lang="en" hidden>Unit</span></button></th>
+            <th data-field="m1" class="ae-col-hide"><button type="button" data-sort="m1"><span data-l="tr" lang="tr">1 ay</span><span data-l="en" lang="en" hidden>1 month</span></button></th>
+            <th data-field="y1" aria-sort="descending"><button type="button" data-sort="y1"><span data-l="tr" lang="tr">12 ay</span><span data-l="en" lang="en" hidden>12 months</span></button></th>
+            <th data-field="vsAvg"><button type="button" data-sort="vsAvg"><span data-l="tr" lang="tr">10 yıl ort.</span><span data-l="en" lang="en" hidden>vs 10-yr avg</span></button></th>
+            <th data-field="post" class="ae-l ae-col-hide"><button type="button" data-sort="post"><span data-l="tr" lang="tr">Blog yazısı</span><span data-l="en" lang="en" hidden>Article</span></button></th>
+          </tr>
+        </thead>
+        <tbody data-draw="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ae-section ae-card" id="gunluk-hayat">
+    <h2 class="ae-h2"><span data-l="tr" lang="tr">Günlük hayatta: bu fiyatlar neye dokunuyor?</span><span data-l="en" lang="en" hidden>In everyday life: what do these prices touch?</span></h2>
+    <p class="ae-note" data-l="tr" lang="tr">Ham madde fiyatı rafa birebir yansımaz. Önce bütün ürünler için geçerli üç kural, sonra her ürünün günlük hayatta nerede karşınıza çıktığı; kaynak bulunan ürünlerde de rafa nasıl yansıdığı.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>Raw material prices don't pass to the shelf one for one. First, three rules that apply to every product; then where each product shows up in everyday life and, where a source exists, how it reaches the shelf.</p>
+    <div class="ae-rules" data-draw="liferules" data-source="life summary"></div>
+    <div class="ae-life-grid" data-draw="lifecards" data-source="life summary"></div>
+  </section>
+
+  <section class="ae-section ae-card" id="karsilastirma">
+    <h2 class="ae-h2"><span data-l="tr" lang="tr">Karşılaştırma: 2015–2024 ortalaması = 100</span><span data-l="en" lang="en" hidden>Comparison: 2015–2024 average = 100</span></h2>
+    <p class="ae-note" data-l="tr" lang="tr">Her ürün kendi 2015–2024 ortalamasına bölünür. Böylece ton, libre ve endeks gibi farklı birimler aynı eksende okunur; 150, ürünün on yıllık ortalamasının %50 üstünde olduğu anlamına gelir. En fazla 8 ürün seçilebilir.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>Each product is divided by its own 2015–2024 average, so tonnes, pounds and index points can be read on one axis; 150 means the product is 50% above its ten-year average. Up to 8 products can be selected.</p>
+    <div class="ae-controls" role="group" aria-label="Grafikteki ürünler / Products in the chart">
+      <button type="button" class="ae-chip" data-series="food"><span data-l="tr" lang="tr">Gıda endeksi</span><span data-l="en" lang="en" hidden>Food index</span></button>
+      <button type="button" class="ae-chip" data-series="wheat"><span data-l="tr" lang="tr">Buğday</span><span data-l="en" lang="en" hidden>Wheat</span></button>
+      <button type="button" class="ae-chip" data-series="maize"><span data-l="tr" lang="tr">Mısır</span><span data-l="en" lang="en" hidden>Maize</span></button>
+      <button type="button" class="ae-chip" data-series="rice"><span data-l="tr" lang="tr">Pirinç</span><span data-l="en" lang="en" hidden>Rice</span></button>
+      <button type="button" class="ae-chip" data-series="soy"><span data-l="tr" lang="tr">Soya</span><span data-l="en" lang="en" hidden>Soybeans</span></button>
+      <button type="button" class="ae-chip" data-series="palm"><span data-l="tr" lang="tr">Palm yağı</span><span data-l="en" lang="en" hidden>Palm oil</span></button>
+      <button type="button" class="ae-chip" data-series="sunoil"><span data-l="tr" lang="tr">Ayçiçek yağı</span><span data-l="en" lang="en" hidden>Sunflower oil</span></button>
+      <button type="button" class="ae-chip" data-series="olive"><span data-l="tr" lang="tr">Zeytinyağı</span><span data-l="en" lang="en" hidden>Olive oil</span></button>
+      <button type="button" class="ae-chip" data-series="sugar"><span data-l="tr" lang="tr">Şeker</span><span data-l="en" lang="en" hidden>Sugar</span></button>
+      <button type="button" class="ae-chip" data-series="arabica"><span data-l="tr" lang="tr">Arabika</span><span data-l="en" lang="en" hidden>Arabica</span></button>
+      <button type="button" class="ae-chip" data-series="cocoa"><span data-l="tr" lang="tr">Kakao</span><span data-l="en" lang="en" hidden>Cocoa</span></button>
+      <button type="button" class="ae-chip" data-series="beef"><span data-l="tr" lang="tr">Sığır eti</span><span data-l="en" lang="en" hidden>Beef</span></button>
+      <button type="button" class="ae-chip" data-series="salmon"><span data-l="tr" lang="tr">Somon</span><span data-l="en" lang="en" hidden>Salmon</span></button>
+      <button type="button" class="ae-chip" data-series="fert"><span data-l="tr" lang="tr">Gübre</span><span data-l="en" lang="en" hidden>Fertilizer</span></button>
+    </div>
+    <div class="ae-controls">
+      <div class="ae-seg ae-range" role="group" aria-label="Dönem / Period">
+        <button type="button" data-range="all"><span data-l="tr" lang="tr">2015'ten bu yana</span><span data-l="en" lang="en" hidden>Since 2015</span></button>
+        <button type="button" data-range="5y"><span data-l="tr" lang="tr">Son 5 yıl</span><span data-l="en" lang="en" hidden>Last 5 years</span></button>
+        <button type="button" data-range="2y"><span data-l="tr" lang="tr">Son 2 yıl</span><span data-l="en" lang="en" hidden>Last 2 years</span></button>
+      </div>
+    </div>
+    <div class="ae-chart" id="grafik" data-draw="chart" data-source="rebased"></div>
+  </section>
+
+  <section class="ae-section ae-card" id="karne">
+    <h2 class="ae-h2"><span data-l="tr" lang="tr">Hipotez karnesi</span><span data-l="en" lang="en" hidden>Hypothesis scorecard</span></h2>
+    <p class="ae-note" data-l="tr" lang="tr">AgriHub-AI yazıları tahmin satmaz, ama sınanabilir hipotezler kurar: her birinde bir kontrol tarihi ve "şu olursa yanıldık" diyen bir yanılma koşulu var. Tarihi gelen her hipotez kontrol edilir ve sonucu burada, tuttuysa da tutmadıysa da aynı görünürlükte yazılır. Yalnızca yazıda açık bir yanılma koşulu olan hipotezler listelenir.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>AgriHub-AI articles don't sell forecasts, but they set testable hypotheses: each has a check date and a falsification condition that says "if this happens, we were wrong". Every hypothesis is checked when its date comes, and the result is shown here with the same prominence whether it held or not. Only hypotheses with an explicit falsification condition in the article are listed.</p>
+    <div class="ae-score" data-source="scorecard">
+      <span class="ae-score-item"><b data-draw="sc-hit" data-source="scorecard" data-field="hit" class="dash-skeleton">—</b><span data-l="tr" lang="tr">tuttu</span><span data-l="en" lang="en" hidden>held</span></span>
+      <span class="ae-score-item"><b data-draw="sc-partial" data-source="scorecard" data-field="partial" class="dash-skeleton">—</b><span data-l="tr" lang="tr">kısmen</span><span data-l="en" lang="en" hidden>partly</span></span>
+      <span class="ae-score-item"><b data-draw="sc-miss" data-source="scorecard" data-field="miss" class="dash-skeleton">—</b><span data-l="tr" lang="tr">tutmadı</span><span data-l="en" lang="en" hidden>failed</span></span>
+      <span class="ae-score-item"><b data-draw="sc-nodata" data-source="scorecard" data-field="nodata" class="dash-skeleton">—</b><span data-l="tr" lang="tr">veri çıkmadı</span><span data-l="en" lang="en" hidden>no data</span></span>
+      <span class="ae-score-item"><b data-draw="sc-pending" data-source="scorecard" data-field="pending" class="dash-skeleton">—</b><span data-l="tr" lang="tr">bekliyor</span><span data-l="en" lang="en" hidden>pending</span></span>
+    </div>
+    <p class="ae-score-rate" data-draw="sc-rate" data-source="scorecard" data-field="rate">—</p>
+    <div class="ae-tablewrap">
+      <table class="ae-table ae-hyp" data-source="hypotheses" data-row-key="id">
+        <thead>
+          <tr>
+            <th data-field="due"><span data-l="tr" lang="tr">Kontrol tarihi</span><span data-l="en" lang="en" hidden>Check date</span></th>
+            <th data-field="claim"><span data-l="tr" lang="tr">Hipotez</span><span data-l="en" lang="en" hidden>Hypothesis</span></th>
+            <th data-field="cond"><span data-l="tr" lang="tr">Yanılma koşulu</span><span data-l="en" lang="en" hidden>Falsification condition</span></th>
+            <th data-field="status"><span data-l="tr" lang="tr">Durum</span><span data-l="en" lang="en" hidden>Status</span></th>
+          </tr>
+        </thead>
+        <tbody data-draw="hyprows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ae-section" id="yontem">
+    <h2 class="ae-h2"><span data-l="tr" lang="tr">Nasıl okunur</span><span data-l="en" lang="en" hidden>How to read it</span></h2>
+    <div class="ae-notes" data-l="tr" lang="tr">
+      <div>
+        <h3>Fiyatlar</h3>
+        <p>IMF'nin birincil emtia fiyatları, FRED (St. Louis Fed) üzerinden. Her değer bir ayın ortalaması ve ABD doları cinsinden. Tablodaki bağlantılar, o ürünü ele alan AgriHub-AI yazısına gider.</p>
+      </div>
+      <div>
+        <h3>Gübre</h3>
+        <p>IMF'nin gübre serileri FRED'de yayımlanmıyor. Bu yüzden gübre için ABD Çalışma İstatistikleri Bürosu'nun üretici fiyat endeksi (gübre maddeleri) kullanıldı. Bir dünya fiyatı değil, ABD'deki üretici fiyatlarının endeksidir.</p>
+      </div>
+      <div>
+        <h3>Zeytinyağı, 2020 sonu</h3>
+        <p>IMF zeytinyağı serisinde Kasım ve Aralık 2020'de fiyat bir anda yarıdan aşağı inip Ocak 2021'de eski düzeyine dönüyor. Bu iki ay büyük olasılıkla kaynaktaki bir veri hatası; olduğu gibi gösterildi, ortalama hesabına da dahil.</p>
+      </div>
+      <div>
+        <h3>Güncelleme</h3>
+        <p>IMF fiyatları her ay, bir önceki ayın verisiyle yayımlanır. Fiyatlar her hafta FRED'den otomatik olarak yenilenir; blog bağlantıları, hipotez karnesi ve günlük hayat kartları her yeni AgriHub-AI yazısıyla güncellenir. Son veri ayı sayfanın başında yazar.</p>
+      </div>
+    </div>
+    <div class="ae-notes" data-l="en" lang="en" hidden>
+      <div>
+        <h3>Prices</h3>
+        <p>IMF primary commodity prices, via FRED (St. Louis Fed). Each value is a monthly average in US dollars. The links in the table lead to the AgriHub-AI article on that product.</p>
+      </div>
+      <div>
+        <h3>Fertilizer</h3>
+        <p>The IMF's fertilizer series are not published on FRED, so fertilizer uses the US Bureau of Labor Statistics producer price index for fertilizer materials. It is an index of US producer prices, not a world price.</p>
+      </div>
+      <div>
+        <h3>Olive oil, late 2020</h3>
+        <p>In the IMF olive oil series, the price falls by more than half in November and December 2020 and returns to its earlier level in January 2021. These two months are most likely a data error at the source; they are shown as published and included in the average.</p>
+      </div>
+      <div>
+        <h3>Updates</h3>
+        <p>IMF prices are published monthly, with the previous month's data. Prices are refreshed automatically from FRED every week; article links, the hypothesis scorecard and the everyday-life cards are updated with each new AgriHub-AI article. The latest data month is shown at the top of the page.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Hesaplar: okur her birinin formülünü kaynak panelinde görür.
+  dash.calc('summary', {
+    inputs: ['prices', 'series'],
+    title: 'Ürün özeti',
+    description: 'Her ürünün son ayı ve son fiyatı; 1 ve 12 aylık yüzde değişim; son fiyatın 2015–2024 ortalamasından yüzde farkı.',
+    fn: (prices, series) => series.map((s) => {
+      const r = prices.filter((p) => p.series === s.series).sort((a, b) => a.date < b.date ? -1 : 1);
+      const last = r[r.length - 1];
+      const prev = r[r.length - 2];
+      const ago = r.find((p) => p.date === (Number(last.date.slice(0, 4)) - 1) + last.date.slice(4));
+      const base = r.filter((p) => p.date >= '2015-01-01' && p.date <= '2024-12-01');
+      const avg = base.reduce((t, p) => t + p.value, 0) / base.length;
+      const pct = (a, b) => b ? Math.round((a / b - 1) * 1000) / 10 : null;
+      return {
+        series: s.series, name: s.name, name_en: s.name_en, unit: s.unit, unit_en: s.unit_en,
+        post: s.post, post_en: s.post_en, post_url: s.post_url,
+        date: last.date, latest: last.value,
+        m1: pct(last.value, prev && prev.value), y1: pct(last.value, ago && ago.value), vsAvg: pct(last.value, avg),
+      };
+    }),
+  });
+
+  dash.calc('above', {
+    inputs: ['summary'],
+    title: 'Ortalamanın üstündeki ürünler',
+    description: 'Gıda endeksi dışındaki ürünlerin sayısı ve son fiyatı 2015–2024 ortalamasının üstünde olanların sayısı.',
+    fn: (summary) => {
+      const items = summary.filter((s) => s.series !== 'food');
+      return [{ n: items.filter((s) => s.vsAvg > 0).length, total: items.length }];
+    },
+  });
+
+  dash.calc('extremes', {
+    inputs: ['summary'],
+    title: '12 ayda en çok artan ve düşen',
+    description: 'Gıda endeksi dışındaki ürünler arasında 12 aylık değişimi en yüksek ve en düşük olan.',
+    fn: (summary) => {
+      const items = summary.filter((s) => s.series !== 'food' && s.y1 !== null).sort((a, b) => b.y1 - a.y1);
+      const up = items[0];
+      const down = items[items.length - 1];
+      return [
+        { which: 'up', series: up.series, name: up.name, name_en: up.name_en, y1: up.y1 },
+        { which: 'down', series: down.series, name: down.name, name_en: down.name_en, y1: down.y1 },
+      ];
+    },
+  });
+
+  dash.calc('rebased', {
+    inputs: ['prices'],
+    title: '2015–2024 ortalaması = 100',
+    description: 'Her ayın fiyatı, aynı ürünün 2015–2024 aylık ortalamasına bölünüp 100 ile çarpıldı.',
+    fn: (prices) => {
+      const avg = {};
+      for (const p of prices) {
+        if (p.date < '2015-01-01' || p.date > '2024-12-01') continue;
+        const a = avg[p.series] || (avg[p.series] = { t: 0, n: 0 });
+        a.t += p.value; a.n += 1;
+      }
+      return prices.map((p) => ({ series: p.series, date: p.date, idx: Math.round(p.value / (avg[p.series].t / avg[p.series].n) * 1000) / 10 }));
+    },
+  });
+
+  dash.calc('scorecard', {
+    inputs: ['hypotheses'],
+    title: 'Hipotez karnesi sayacı',
+    description: 'Hipotezlerin duruma göre sayısı; doğruluk oranı = tuttu ÷ (tuttu + kısmen + tutmadı), yalnızca en az 10 hipotez sonuçlandığında hesaplanır.',
+    fn: (hypotheses) => {
+      const c = (s) => hypotheses.filter((h) => h.status === s).length;
+      const hit = c('hit'), partial = c('partial'), miss = c('miss');
+      const resolved = hit + partial + miss;
+      return [{ hit, partial, miss, nodata: c('nodata'), pending: c('pending'), resolved, total: hypotheses.length,
+        rate: resolved >= 10 ? Math.round(hit / resolved * 1000) / 10 : null }];
+    },
+  });
+
+  // Dil ve biçimlendirme
+  if ((location.hash || '').slice(1) === 'en') dash.setParams({ lang: 'en' });
+  const L = () => (dash.params().lang === 'en' ? 'en' : 'tr');
+  const loc = () => (L() === 'en' ? 'en-GB' : 'tr-TR');
+  const nf = (d) => new Intl.NumberFormat(loc(), { minimumFractionDigits: d, maximumFractionDigits: d });
+  window.AE = {
+    lang: L,
+    month: (d) => new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d),
+    monthShort: (d) => new Intl.DateTimeFormat(loc(), { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d),
+    num: (v) => v === null || v === undefined ? '' : nf(Math.abs(v) >= 1000 ? 0 : Math.abs(v) >= 100 ? 1 : 2).format(v),
+    pct: (v) => {
+      if (v === null || v === undefined) return '';
+      const sign = v > 0 ? '+' : v < 0 ? '−' : '';
+      const n = nf(1).format(Math.abs(v));
+      return L() === 'en' ? sign + n + '%' : sign + '%' + n;
+    },
+    tone: (el, v) => { el.classList.toggle('ae-up', v > 0); el.classList.toggle('ae-down', v < 0); },
+    name: (r) => (L() === 'en' && r.name_en ? r.name_en : r.name),
+    unit: (r) => (L() === 'en' && r.unit_en ? r.unit_en : r.unit),
+    post: (r) => (L() === 'en' && r.post_en ? r.post_en : r.post),
+    due: (h) => {
+      const d = new Date(h.due);
+      const o = h.due_precision === 'day' ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' } : { month: 'long', year: 'numeric', timeZone: 'UTC' };
+      return new Intl.DateTimeFormat(loc(), o).format(d);
+    },
+    tx: (h, k) => (L() === 'en' && h[k + '_en'] ? h[k + '_en'] : h[k]),
+    sel: () => { const s = dash.params().sel; return Array.isArray(s) ? s : ['food', 'wheat', 'cocoa', 'olive']; },
+    range: () => dash.params().range || 'all',
+    sort: { key: 'y1', dir: -1 },
+  };
+</script>
+
+<script>
+  // Tek değerlik çizimler
+  const row = (id, key, val) => {
+    const g = dash.data(id);
+    if (g.status !== 'ok') return null;
+    return (g.data || []).find((r) => r[key] === val) || null;
+  };
+  const one = (name, id, key, val, fmt, toned, field) => dash.draw(name, (el) => {
+    const g = dash.data(id);
+    if (g.status !== 'loading') el.classList.remove('dash-skeleton');
+    const r = row(id, key, val);
+    if (!r) { el.textContent = '—'; return; }
+    const v = field ? r[field] : null;
+    el.textContent = fmt(field ? v : r);
+    if (toned) AE.tone(el, v);
+  });
+  one('lastmonth', 'summary', 'series', 'food', (r) => AE.month(new Date(r.date)));
+  one('foody1', 'summary', 'series', 'food', AE.pct, false, 'y1');
+  one('foodlatest', 'summary', 'series', 'food', AE.num, false, 'latest');
+  one('foody1b', 'summary', 'series', 'food', AE.pct, true, 'y1');
+  one('perty1', 'summary', 'series', 'fert', AE.pct, true, 'y1');
+  one('fertlatest', 'summary', 'series', 'fert', AE.num, false, 'latest');
+  one('upname', 'extremes', 'which', 'up', AE.name);
+  one('upval', 'extremes', 'which', 'up', AE.pct, true, 'y1');
+  one('downname', 'extremes', 'which', 'down', AE.name);
+  one('downval', 'extremes', 'which', 'down', AE.pct, true, 'y1');
+  const count = (name, field) => dash.draw(name, (el) => {
+    const g = dash.data('above');
+    if (g.status !== 'loading') el.classList.remove('dash-skeleton');
+    if (g.status !== 'ok' || !g.data.length) { el.textContent = '—'; return; }
+    el.textContent = String(g.data[0][field]);
+  });
+  count('abovetotal', 'total');
+  count('abovecount', 'n');
+</script>
+
+<script>
+  // Ürün tablosu
+  dash.draw('rows', (tbody) => {
+    const g = dash.data('summary');
+    tbody.replaceChildren();
+    if (g.status !== 'ok') return;
+    const sel = AE.sel();
+    const { key, dir } = AE.sort;
+    const val = (r) => key === 'name' ? AE.name(r) : key === 'unit' ? AE.unit(r) : key === 'post' ? AE.post(r) : r[key];
+    const items = g.data.filter((r) => r.series !== 'food').slice().sort((a, b) => {
+      const x = val(a), y = val(b);
+      if (x === null || x === undefined || x === '') return 1;
+      if (y === null || y === undefined || y === '') return -1;
+      return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), AE.lang())) * dir;
+    });
+    for (const r of items) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.series;
+      const i = sel.indexOf(r.series);
+      if (i >= 0) { tr.classList.add('is-on'); tr.style.setProperty('--ae-swatch', dash.colors[i % dash.colors.length]); }
+      const td = (text, cls) => { const c = document.createElement('td'); c.textContent = text; if (cls) c.className = cls; tr.append(c); return c; };
+      td(AE.name(r));
+      td(AE.num(r.latest));
+      td(AE.unit(r), 'ae-l ae-unit ae-col-hide');
+      AE.tone(td(AE.pct(r.m1), 'ae-col-hide'), r.m1);
+      AE.tone(td(AE.pct(r.y1)), r.y1);
+      AE.tone(td(AE.pct(r.vsAvg)), r.vsAvg);
+      const cell = td('', 'ae-l ae-col-hide');
+      if (AE.post(r) && /^https:\/\/agrihubai\.wordpress\.com\//.test(r.post_url || '')) {
+        const a = document.createElement('a');
+        a.href = r.post_url + (AE.lang() === 'en' ? '#english' : '');
+        a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = AE.post(r);
+        cell.append(a);
+      }
+      tbody.append(tr);
+    }
+  });
+
+  const toggle = (s) => {
+    const sel = AE.sel().slice();
+    const i = sel.indexOf(s);
+    if (i >= 0) sel.splice(i, 1); else if (sel.length < 8) sel.push(s); else return;
+    dash.setParams({ sel });
+  };
+
+  for (const t of document.querySelectorAll('.ae-table tbody')) {
+    t.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      const tr = e.target.closest('tr[data-key]');
+      if (tr) toggle(tr.dataset.key);
+    });
+  }
+  for (const b of document.querySelectorAll('.ae-table th button')) {
+    b.addEventListener('click', () => {
+      const key = b.dataset.sort;
+      AE.sort = { key, dir: AE.sort.key === key ? -AE.sort.dir : (key === 'name' || key === 'unit' || key === 'post' ? 1 : -1) };
+      for (const h of document.querySelectorAll('.ae-table th')) h.removeAttribute('aria-sort');
+      b.closest('th').setAttribute('aria-sort', AE.sort.dir > 0 ? 'ascending' : 'descending');
+      dash.draw('rows');
+    });
+  }
+  for (const c of document.querySelectorAll('.ae-chip')) c.addEventListener('click', () => toggle(c.dataset.series));
+  for (const b of document.querySelectorAll('.ae-range button')) b.addEventListener('click', () => dash.setParams({ range: b.dataset.range }));
+  for (const b of document.querySelectorAll('.ae-lang button')) {
+    b.addEventListener('click', () => {
+      dash.setParams({ lang: b.dataset.lang });
+      dash.setLink(b.dataset.lang);
+    });
+  }
+
+  dash.onData(() => {
+    const lang = AE.lang();
+    for (const el of document.querySelectorAll('.ae [data-l]')) el.hidden = el.dataset.l !== lang;
+    for (const b of document.querySelectorAll('.ae-lang button')) b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false');
+    const sel = AE.sel();
+    for (const c of document.querySelectorAll('.ae-chip')) {
+      const i = sel.indexOf(c.dataset.series);
+      c.setAttribute('aria-pressed', i >= 0 ? 'true' : 'false');
+      c.style.borderColor = i >= 0 ? dash.colors[i % dash.colors.length] : '';
+    }
+    for (const b of document.querySelectorAll('.ae-range button')) b.setAttribute('aria-pressed', b.dataset.range === AE.range() ? 'true' : 'false');
+  });
+</script>
+
+<script>
+  // Günlük hayatta
+  const srcs = (r) => {
+    let v = r.sources;
+    if (typeof v === 'string') { try { v = JSON.parse(v); } catch (e) { v = []; } }
+    return Array.isArray(v) ? v.filter((x) => x && typeof x === 'object') : [];
+  };
+  const srcLine = (r) => {
+    const p = document.createElement('p'); p.className = 'ae-src';
+    const en = AE.lang() === 'en';
+    p.append(document.createTextNode(en ? 'Source: ' : 'Kaynak: '));
+    srcs(r).forEach((s, i) => {
+      if (i) p.append(document.createTextNode(' · '));
+      if (/^https:\/\//.test(s.url || '')) {
+        const a = document.createElement('a'); a.href = s.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = s.name; p.append(a);
+      } else p.append(document.createTextNode(s.name));
+    });
+    return p;
+  };
+  dash.draw('liferules', (el) => {
+    const g = dash.data('life');
+    el.replaceChildren();
+    if (g.status !== 'ok') return;
+    for (const r of g.data.filter((x) => String(x.series).startsWith('rule-'))) {
+      const d = document.createElement('div'); d.className = 'ae-rule'; d.dataset.key = r.series;
+      const h = document.createElement('h3'); h.textContent = AE.tx(r, 'where');
+      const p = document.createElement('p'); p.textContent = AE.tx(r, 'fact');
+      d.append(h, p);
+      const lo = Number(r.lag_min), hi = Number(r.lag_max);
+      const sg = dash.data('summary');
+      const food = sg.status === 'ok' ? sg.data.find((x) => x.series === 'food') : null;
+      if (lo && hi && food) {
+        const base = new Date(food.date);
+        const from = AE.month(d3.utcMonth.offset(base, lo));
+        const to = AE.month(d3.utcMonth.offset(base, hi));
+        const w = document.createElement('p'); w.className = 'ae-rule-when';
+        w.textContent = AE.lang() === 'en'
+          ? `Latest data on this dashboard: ${AE.month(base)}. On the IMF average, these prices are fully reflected on shelves between ${from} and ${to} (varies by product and country).`
+          : `Bu panodaki son veri ayı ${AE.month(base)}. IMF ortalamasına göre bu fiyatların rafa tam yansıması ${from} ile ${to} arasında tamamlanır (ürüne ve ülkeye göre değişir).`;
+        d.append(w);
+      }
+      if (srcs(r).length) d.append(srcLine(r));
+      el.append(d);
+    }
+  });
+  dash.draw('lifecards', (el) => {
+    const g = dash.data('life');
+    const sg = dash.data('summary');
+    el.replaceChildren();
+    if (g.status !== 'ok') return;
+    const en = AE.lang() === 'en';
+    const sum = {};
+    if (sg.status === 'ok') for (const r of sg.data) sum[r.series] = r;
+    const order = sg.status === 'ok' ? sg.data.map((r) => r.series) : [];
+    const cards = g.data.filter((x) => !String(x.series).startsWith('rule-'))
+      .sort((a, b) => order.indexOf(a.series) - order.indexOf(b.series));
+    for (const r of cards) {
+      const s = sum[r.series];
+      const c = document.createElement('article'); c.className = 'ae-life'; c.dataset.key = r.series;
+      const head = document.createElement('div'); head.className = 'ae-life-head';
+      const h = document.createElement('h3'); h.textContent = s ? AE.name(s) : r.series;
+      head.append(h);
+      if (s && s.y1 !== null) {
+        const chg = document.createElement('span'); chg.className = 'ae-life-chg';
+        chg.textContent = (en ? '12 months: ' : '12 ay: ') + AE.pct(s.y1);
+        AE.tone(chg, s.y1);
+        head.append(chg);
+      }
+      c.append(head);
+      const w = document.createElement('p');
+      const wk = document.createElement('span'); wk.className = 'ae-life-k'; wk.textContent = en ? 'Where you meet it' : 'Nerede karşınıza çıkar?';
+      w.append(wk, document.createTextNode(AE.tx(r, 'where')));
+      c.append(w);
+      const fact = AE.tx(r, 'fact');
+      if (fact) {
+        const f = document.createElement('p'); f.className = 'ae-life-fact';
+        const fk = document.createElement('span'); fk.className = 'ae-life-k'; fk.textContent = en ? 'Worth knowing' : 'Bilinmesi gereken';
+        f.append(fk, document.createTextNode(fact));
+        c.append(f);
+      }
+      if (srcs(r).length) c.append(srcLine(r));
+      el.append(c);
+    }
+  });
+</script>
+
+<script>
+  // Hipotez karnesi
+  const sc = (name, field) => dash.draw(name, (el) => {
+    const g = dash.data('scorecard');
+    if (g.status !== 'loading') el.classList.remove('dash-skeleton');
+    if (g.status !== 'ok' || !g.data.length) { el.textContent = '—'; return; }
+    el.textContent = String(g.data[0][field]);
+  });
+  sc('sc-hit', 'hit'); sc('sc-partial', 'partial'); sc('sc-miss', 'miss'); sc('sc-nodata', 'nodata'); sc('sc-pending', 'pending');
+  dash.draw('sc-rate', (el) => {
+    const g = dash.data('scorecard');
+    if (g.status !== 'ok' || !g.data.length) { el.textContent = '—'; return; }
+    const r = g.data[0];
+    const en = AE.lang() === 'en';
+    if (r.rate === null) {
+      el.textContent = en
+        ? `Accuracy rate: shown once at least 10 hypotheses are resolved (now ${r.resolved} of ${r.total}). Held ÷ (held + partly + failed).`
+        : `Doğruluk oranı: en az 10 hipotez sonuçlandığında gösterilir (şu an ${r.total} hipotezden ${r.resolved} tanesi sonuçlandı). Tuttu ÷ (tuttu + kısmen + tutmadı).`;
+    } else {
+      const p = new Intl.NumberFormat(en ? 'en-GB' : 'tr-TR', { maximumFractionDigits: 1 }).format(r.rate);
+      el.textContent = en
+        ? `Accuracy rate: ${p}% (${r.hit} held out of ${r.resolved} resolved). Held ÷ (held + partly + failed).`
+        : `Doğruluk oranı: %${p} (sonuçlanan ${r.resolved} hipotezden ${r.hit} tanesi tuttu). Tuttu ÷ (tuttu + kısmen + tutmadı).`;
+    }
+  });
+
+  dash.draw('hyprows', (tbody) => {
+    const g = dash.data('hypotheses');
+    tbody.replaceChildren();
+    if (g.status !== 'ok') return;
+    const en = AE.lang() === 'en';
+    const label = {
+      pending: en ? 'Pending' : 'Bekliyor', hit: en ? 'Held' : 'Tuttu', partial: en ? 'Partly' : 'Kısmen',
+      miss: en ? 'Failed' : 'Tutmadı', nodata: en ? 'No data' : 'Veri çıkmadı',
+    };
+    const items = g.data.slice().sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0));
+    for (const h of items) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = h.id;
+      const td = (cls) => { const c = document.createElement('td'); c.className = cls; tr.append(c); return c; };
+      td('ae-hyp-due').textContent = AE.due(h);
+      const c2 = td('ae-hyp-claim');
+      c2.append(document.createTextNode(AE.tx(h, 'claim')));
+      const tag = document.createElement('span'); tag.className = 'ae-hyp-tag';
+      if (/^https:\/\/agrihubai\.wordpress\.com\//.test(h.post_url || '')) {
+        const a = document.createElement('a');
+        a.href = h.post_url + (en ? '#english' : ''); a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = AE.tx(h, 'post');
+        tag.append(a);
+      } else tag.textContent = AE.tx(h, 'post');
+      if (h.interim === true || h.interim === 'true') tag.append(document.createTextNode(en ? ' · interim check' : ' · ara kontrol'));
+      c2.append(tag);
+      td('ae-hyp-cond').textContent = AE.tx(h, 'cond');
+      const c4 = td('ae-hyp-status');
+      const pill = document.createElement('span');
+      pill.className = 'ae-pill is-' + (label[h.status] ? h.status : 'pending');
+      pill.textContent = label[h.status] || label.pending;
+      c4.append(pill);
+      const sub = document.createElement('span'); sub.className = 'ae-hyp-sub';
+      if (h.status === 'pending' || !label[h.status]) sub.textContent = (en ? 'Expected: ' : 'Beklenen: ') + AE.due(h);
+      else sub.textContent = AE.tx(h, 'note');
+      if (sub.textContent) c4.append(sub);
+      tbody.append(tr);
+    }
+  });
+</script>
+
+<script>
+  // Karşılaştırma grafiği
+  dash.draw('chart', (el) => {
+    const g = dash.data('rebased');
+    const sg = dash.data('summary');
+    el.replaceChildren();
+    if (g.status !== 'ok') return;
+    const en = AE.lang() === 'en';
+    const names = {};
+    if (sg.status === 'ok') for (const r of sg.data) names[r.series] = AE.name(r);
+    const sel = AE.sel();
+    const all = g.data.map((r) => ({ series: r.series, date: new Date(r.date), idx: r.idx }));
+    const maxDate = d3.max(all, (r) => r.date);
+    const yearsBack = { all: null, '5y': 5, '2y': 2 }[AE.range()];
+    const minDate = yearsBack ? d3.utcMonth.offset(maxDate, -12 * yearsBack) : d3.min(all, (r) => r.date);
+    const lines = sel.map((s, i) => ({
+      s, i, color: dash.colors[i % dash.colors.length], name: names[s] || s,
+      pts: all.filter((r) => r.series === s && r.date >= minDate),
+    })).filter((l) => l.pts.length);
+
+    const W = Math.max(280, el.clientWidth);
+    const H = 340;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img')
+      .attr('aria-label', en ? 'Price index of the selected products relative to their 2015–2024 average' : 'Seçili ürünlerin 2015–2024 ortalamasına göre fiyat endeksi');
+    if (!lines.length) {
+      svg.append('text').attr('x', 0).attr('y', 24).attr('fill', 'var(--color-fg-muted)').attr('font-size', 13)
+        .text(en ? 'Select a product above to show it in the chart.' : 'Grafikte göstermek için yukarıdan bir ürün seçin.');
+      return;
+    }
+    const vals = lines.flatMap((l) => l.pts.map((p) => p.idx));
+    const y = d3.scaleLinear([Math.min(80, d3.min(vals)), Math.max(120, d3.max(vals))], [H - 28, 12]).nice();
+    const fmtY = (v) => new Intl.NumberFormat(en ? 'en-GB' : 'tr-TR', { maximumFractionDigits: 1 }).format(v);
+
+    const probe = svg.append('g').attr('font-size', 11);
+    const yTicks = y.ticks(6);
+    let left = 0;
+    for (const t of yTicks) left = Math.max(left, probe.append('text').text(fmtY(t)).node().getComputedTextLength());
+    const endText = (l) => `${l.name} ${fmtY(l.pts[l.pts.length - 1].idx)}`;
+    let right = 0;
+    const wide = W > 520;
+    if (wide) for (const l of lines) right = Math.max(right, probe.append('text').text(endText(l)).node().getComputedTextLength());
+    probe.remove();
+    const m = { l: Math.ceil(left) + 10, r: wide ? Math.ceil(right) + 14 : 8 };
+    const x = d3.scaleUtc([minDate, maxDate], [m.l, W - m.r]);
+
+    const grid = svg.append('g');
+    for (const t of yTicks) {
+      grid.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(t)).attr('y2', y(t))
+        .attr('stroke', t === 100 ? 'var(--cds-chart-reference)' : 'var(--cds-chart-grid)').attr('stroke-dasharray', t === 100 ? '4 3' : null);
+      grid.append('text').attr('x', m.l - 8).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(fmtY(t));
+    }
+    const xTicks = x.ticks(Math.max(2, Math.floor((W - m.l - m.r) / 90)));
+    const xf = AE.range() === '2y' ? AE.monthShort : (d) => String(d.getUTCFullYear());
+    for (const t of xTicks) {
+      grid.append('text').attr('x', x(t)).attr('y', H - 8).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(xf(t));
+    }
+    grid.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - 28).attr('y2', H - 28).attr('stroke', 'var(--cds-chart-axis)');
+
+    const line = d3.line().x((p) => x(p.date)).y((p) => y(p.idx));
+    for (const l of lines) {
+      svg.append('path').attr('d', line(l.pts)).attr('fill', 'none').attr('stroke', l.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round');
+      const e = l.pts[l.pts.length - 1];
+      svg.append('circle').attr('cx', x(e.date)).attr('cy', y(e.idx)).attr('r', 3).attr('fill', l.color);
+    }
+
+    if (wide) {
+      const labs = lines.map((l) => ({ l, y: y(l.pts[l.pts.length - 1].idx) })).sort((a, b) => a.y - b.y);
+      for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 14) labs[i].y = labs[i - 1].y + 14;
+      const over = labs.length ? labs[labs.length - 1].y - (H - 34) : 0;
+      if (over > 0) for (const a of labs) a.y -= over;
+      for (const a of labs) svg.append('text').attr('x', W - m.r + 8).attr('y', a.y).attr('dy', '0.32em').attr('font-size', 11).attr('fill', a.l.color).text(endText(a.l));
+    }
+
+    const tip = document.createElement('div');
+    tip.className = 'ae-tip';
+    tip.hidden = true;
+    el.append(tip);
+    const rule = svg.append('line').attr('y1', 12).attr('y2', H - 28).attr('stroke', 'var(--cds-chart-axis)').attr('visibility', 'hidden');
+    const dots = svg.append('g');
+    const dates = lines[0].pts.map((p) => p.date);
+    svg.append('rect').attr('x', m.l).attr('y', 0).attr('width', Math.max(0, W - m.l - m.r)).attr('height', H - 28).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px] = d3.pointer(ev);
+        const i = d3.bisectCenter(dates.map(Number), +x.invert(px));
+        const d = dates[Math.max(0, Math.min(dates.length - 1, i))];
+        const cx = x(d);
+        rule.attr('x1', cx).attr('x2', cx).attr('visibility', 'visible');
+        dots.selectAll('*').remove();
+        tip.replaceChildren();
+        const head = document.createElement('div'); head.className = 'ae-tip-date'; head.textContent = AE.month(d); tip.append(head);
+        for (const l of lines) {
+          const p = l.pts.find((q) => +q.date === +d);
+          if (!p) continue;
+          dots.append('circle').attr('cx', cx).attr('cy', y(p.idx)).attr('r', 3.5).attr('fill', l.color);
+          const rw = document.createElement('div'); rw.className = 'ae-tip-row';
+          const sw = document.createElement('span'); sw.className = 'ae-tip-sw'; sw.style.background = l.color;
+          const nm = document.createElement('span'); nm.textContent = l.name;
+          const v = document.createElement('span'); v.className = 'ae-tip-v'; v.textContent = fmtY(p.idx);
+          rw.append(sw, nm, v); tip.append(rw);
+        }
+        tip.hidden = false;
+        const scale = el.clientWidth / W;
+        const tw = tip.offsetWidth;
+        let lx = cx * scale + 12;
+        if (lx + tw > el.clientWidth) lx = cx * scale - tw - 12;
+        tip.style.transform = `translate(${Math.max(0, lx)}px, 16px)`;
+      })
+      .on('pointerleave', () => { tip.hidden = true; rule.attr('visibility', 'hidden'); dots.selectAll('*').remove(); });
+  });
+</script>

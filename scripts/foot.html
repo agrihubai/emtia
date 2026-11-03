@@ -1,0 +1,11 @@
+<footer class="ae-foot">
+  <span data-l="tr" lang="tr">Bu sayfa yapay zekâ ile hazırlanmıştır; yatırım tavsiyesi değildir. Fiyat verisi her hafta FRED'den otomatik olarak yenilenir. AgriHub-AI · <a href="https://agrihubai.wordpress.com/">agrihubai.wordpress.com</a></span>
+  <span data-l="en" lang="en" hidden>This page was prepared with artificial intelligence; it is not investment advice. Price data is refreshed automatically from FRED every week. AgriHub-AI · <a href="https://agrihubai.wordpress.com/">agrihubai.wordpress.com</a></span>
+</footer>
+</div>
+<script>
+  // Altbilgi dili, panonun dil düğmesini izler
+  dash.onData(() => { const l = dash.params().lang === 'en' ? 'en' : 'tr'; document.documentElement.lang = l; for (const el of document.querySelectorAll('.ae-foot [data-l]')) el.hidden = el.dataset.l !== l; });
+</script>
+</body>
+</html>
