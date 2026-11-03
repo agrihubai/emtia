@@ -13,7 +13,10 @@
 "cond_en": "If two Sinograin auctions in a row sell more than 60% in November 2026, the finding weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Sinograin ithal soya ihalesi satış oranı: %33,65 (27 Ekim 2026); 13 Ekim %40,5. Eşik: iki ihale üst üste %60.",
+"last_en": "Sinograin imported-soy auction sale rate: 33.65% (27 Oct 2026); 40.5% on 13 Oct. Threshold: two auctions in a row above 60%.",
+"last_src": "Mysteel ihale takibi"
 },
 {
 "id": "SAL",
@@ -29,7 +32,10 @@
 "cond_en": "If, in Wageningen's 2018 data, the climate–harvest link is strongest with no lag or a lag clearly different from two weeks in all six compartments, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Wageningen 2018 salatalık verisine 23 Ekim 2026'da erişilemedi; ölçüm henüz yapılamadı.",
+"last_en": "Wageningen's 2018 cucumber data could not be reached on 23 Oct 2026; not yet measured.",
+"last_src": "4TU.ResearchData"
 },
 {
 "id": "G23",
@@ -45,7 +51,10 @@
 "cond_en": "If port arrivals reach 1.0 million tonnes for 1 October – 31 December 2026, the finding weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "1–18 Ekim 2026 liman girişleri 78.212 t (2025 aynı dönem: 133.209 t, −%41). Eşik: Ekim–Aralık toplamı 1,0 Mt.",
+"last_en": "Port arrivals 1–18 Oct 2026: 78,212 t (same period 2025: 133,209 t, −41%). Threshold: 1.0 Mt for Oct–Dec.",
+"last_src": "Fildişi Sahili verisi (Reuters, Barchart)"
 },
 {
 "id": "G25",
@@ -61,7 +70,10 @@
 "cond_en": "If imports under the quota reach 0.5 million tonnes by 31 December 2026, the finding weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Kota kapsamında gelen ithalat ≈ 0,26 Mt (23 Ekim 2026; kotanın %26'sı). Eşik: 31 Aralık'a kadar 0,5 Mt.",
+"last_en": "Imports under the quota ≈ 0.26 Mt (23 Oct 2026; 26% of the quota). Threshold: 0.5 Mt by 31 Dec.",
+"last_src": "Hindistan basını (ChiniMandi, Business Standard)"
 },
 {
 "id": "G27",
@@ -77,7 +89,10 @@
 "cond_en": "If the Belgapom Fontane price falls below €15/100 kg, the spot–contract gap is closed and the finding weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Belgapom Fontane 20 €/100 kg (25 Eylül 2026); PotatoNL Kat. 01 24 €/100 kg (26 Ekim 2026). Eşik: 15 €/100 kg'ın altı.",
+"last_en": "Belgapom Fontane €20/100 kg (25 Sep 2026); PotatoNL Cat. 01 €24/100 kg (26 Oct 2026). Threshold: below €15/100 kg.",
+"last_src": "Belgapom; PotatoNL (EEX)"
 },
 {
 "id": "G29",
@@ -93,7 +108,10 @@
 "cond_en": "If the Pusa 1509 paddy price rises above Rs 4,700/quintal (the 2023 level), the finding weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Pusa 1509 çeltik Rs 4.000–4.450/kental (22 Ekim 2026). Eşik: Rs 4.700'ün üstü.",
+"last_en": "Pusa 1509 paddy Rs 4,000–4,450/quintal (22 Oct 2026). Threshold: above Rs 4,700.",
+"last_src": "Commodity Board Europe"
 },
 {
 "id": "G4",
@@ -109,7 +127,10 @@
 "cond_en": "If monthly Baltic wheat exports are 1.4 million tonnes or more in January 2027, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Baltık'tan buğday ihracatı Eylül 2026'da 1,4 Mt (rekor); IKAR Ekim için 1,8 Mt bekliyor. Eşik: Ocak 2027'de 1,4 Mt veya üstü.",
+"last_en": "Baltic wheat exports 1.4 Mt in September 2026 (record); IKAR expects 1.8 Mt for October. Threshold: 1.4 Mt or more in January 2027.",
+"last_src": "IKAR / UkrAgroConsult"
 },
 {
 "id": "G20",
@@ -125,7 +146,10 @@
 "cond_en": "If October–December 2026 feedlot placements equal or exceed the same period of 2025, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Eylül 2026 besi girişleri 1,777 milyon baş (2025: 2,021; −%12). Eşik: Ekim–Aralık girişleri 2025'e eşit ya da üstünde.",
+"last_en": "September 2026 feedlot placements 1.777 million head (2025: 2.021; −12%). Threshold: Oct–Dec placements equal to or above 2025.",
+"last_src": "USDA NASS Cattle on Feed"
 },
 {
 "id": "ZEY",
@@ -141,7 +165,10 @@
 "cond_en": "If the official estimate is above 475 thousand tonnes and the Spanish price is below €3/kg, the estimate is wrong.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Bu analizin tahmini 380–450 bin ton. Eşik: resmî tahmin 475 bin tonun üstü ve İspanya fiyatı 3 €/kg'ın altı. Resmî güncel tahmin henüz panoya kaydedilmedi.",
+"last_en": "This analysis estimated 380–450 thousand tonnes. Threshold: official estimate above 475 thousand tonnes and Spanish price below €3/kg. No updated official estimate recorded on the dashboard yet.",
+"last_src": "AgriHub-AI analizi (17 Ekim 2026)"
 },
 {
 "id": "G16",
@@ -157,7 +184,10 @@
 "cond_en": "If restrictions come while retail rice inflation is below 10%, or inflation exceeds 11.5% for two months with no restriction, the hypothesis weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Perakende pirinç fiyatı yıllık +%7,7 (Eylül 2026). Eşikler: %10 ve iki ay üst üste %11,5.",
+"last_en": "Retail rice prices +7.7% year on year (September 2026). Thresholds: 10% and 11.5% for two months in a row.",
+"last_src": "MoSPI / DCA"
 },
 {
 "id": "G18",
@@ -173,7 +203,10 @@
 "cond_en": "If certified arabica stocks rise above 500,000 bags by 31 March 2027, the hypothesis weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "ICE lisanslı arabika stoku 239.748 çuval (21 Ekim 2026). Eşik: 500.000 çuvalın üstü.",
+"last_en": "ICE certified arabica stocks 239,748 bags (21 Oct 2026). Threshold: above 500,000 bags.",
+"last_src": "ICE"
 },
 {
 "id": "G22",
@@ -189,7 +222,10 @@
 "cond_en": "If total imports for October 2026 – February 2027 are more than 5% above a year earlier, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Ocak–Eylül 2026 toplam soya ithalatı 86,18 Mt (2025: 86,19 Mt; değişmedi). Eşik: Ekim–Şubat'ta bir önceki yılın %5'ten fazla üstü.",
+"last_en": "Total soybean imports Jan–Sep 2026: 86.18 Mt (2025: 86.19 Mt; flat). Threshold: Oct–Feb more than 5% above a year earlier.",
+"last_src": "GACC"
 },
 {
 "id": "G24",
@@ -205,7 +241,10 @@
 "cond_en": "If total ICE US stocks are above 3,688,949 bags on 31 March 2027, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "ICE ABD toplam kakao stoku 3.688.949 torba (29 Ekim 2026; 2,5 yılın zirvesi). Eşik: 31 Mart 2027'de bu düzeyin üstü.",
+"last_en": "Total ICE US cocoa stocks 3,688,949 bags (29 Oct 2026; 2.5-year high). Threshold: above this level on 31 Mar 2027.",
+"last_src": "ICE / CocoaIntel"
 },
 {
 "id": "G26",
@@ -221,7 +260,10 @@
 "cond_en": "If net output to 31 March 2027 is not above last year's and domestic prices still fall, the hypothesis weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "2025/26 net şeker üretimi 27,9 Mt; Czarnikow 2026/27 için 28,5 Mt bekliyor. Etanole ayrım 16 Ekim 2026'da sıfırlandı.",
+"last_en": "Net sugar output 2025/26: 27.9 Mt; Czarnikow expects 28.5 Mt for 2026/27. Diversion to ethanol was set to zero on 16 Oct 2026.",
+"last_src": "ISMA; Czarnikow"
 },
 {
 "id": "G9",
@@ -237,7 +279,10 @@
 "cond_en": "If fewer than 100 farms in France, Germany and the Netherlands report malformed offspring by 30 April 2027, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Ekim 2026'da Fransa'da (Oise, Aveyron) sakat kuzu bildirildi; işletme sayısı yayımlanmadı, nedensellik doğrulanmadı. Eşik: 30 Nisan 2027'ye kadar 100 işletme.",
+"last_en": "Malformed lambs reported in France (Oise, Aveyron) in October 2026; no farm count published, causation unconfirmed. Threshold: 100 farms by 30 Apr 2027.",
+"last_src": "ESA platformu"
 },
 {
 "id": "G28",
@@ -253,7 +298,10 @@
 "cond_en": "If the 2027 French Fontane base contract price is €180/t or more, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "2026 Fransa Fontane taban sözleşme fiyatı ≈ 130 €/t (2025: ≈ 180 €/t). Eşik: 2027'de 180 €/t veya üstü.",
+"last_en": "2026 French Fontane base contract price ≈ €130/t (2025: ≈ €180/t). Threshold: €180/t or more in 2027.",
+"last_src": "UNPT; Potato Business"
 },
 {
 "id": "BUG",
@@ -269,7 +317,10 @@
 "cond_en": "If TÜİK's first estimate in May 2027 is above 22 million tonnes and autumn fertilizer sales didn't fall, the estimate is wrong.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "2026 buğday üretimi 22,75 Mt (TÜİK ilk tahmini, 21 Mayıs 2026). Tahmin aralığı 2027 için 20–21,5 Mt; eşik 22 Mt.",
+"last_en": "2026 wheat output 22.75 Mt (TÜİK first estimate, 21 May 2026). The 2027 estimate range is 20–21.5 Mt; threshold 22 Mt.",
+"last_src": "TÜİK"
 },
 {
 "id": "G6",
@@ -285,7 +336,10 @@
 "cond_en": "If Malaysia's February–May 2027 output is not below a year earlier, the first-wave hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Malezya ham palm yağı üretimi Eylül 2026'da 2,11 Mt (aylık +%16,5); stok 3,51 Mt (rekor). Eşik: Şubat–Mayıs 2027 üretimi bir önceki yılın altında değilse.",
+"last_en": "Malaysian crude palm oil output 2.11 Mt in September 2026 (+16.5% m/m); stocks 3.51 Mt (record). Threshold: Feb–May 2027 output not below a year earlier.",
+"last_src": "MPOB"
 },
 {
 "id": "G14",
@@ -301,7 +355,10 @@
 "cond_en": "If average EPA+DHA in Norway's 2026 feed samples is 7.2% or more, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Norveç somon yemlerinde EPA+DHA ortalaması %7,2 (2025 örnekleri, Temmuz 2026 raporu). Eşik: 2026 örneklerinde %7,2 veya üstü.",
+"last_en": "Average EPA+DHA in Norwegian salmon feed 7.2% (2025 samples, July 2026 report). Threshold: 7.2% or more in 2026 samples.",
+"last_src": "Havforskningsinstituttet (IMR)"
 },
 {
 "id": "G30",
@@ -317,7 +374,10 @@
 "cond_en": "If the 2027 basmati area is not larger than in 2026, the hypothesis weakens.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Sektör kaynaklarına göre 2026 basmati alanı ≈ %4 düşük (17 Eylül 2026); resmî alan erişilemedi. Eşik: 2027 alanı 2026'dan büyük değilse.",
+"last_en": "Industry sources put the 2026 basmati area ≈ 4% lower (17 Sep 2026); official area not accessible. Threshold: 2027 area not larger than 2026.",
+"last_src": "NewsBytes; APEDA"
 },
 {
 "id": "G12",
@@ -333,7 +393,10 @@
 "cond_en": "If Kansas yields at least 45 bu/acre and HRW protein is at least 12.0%, the hypothesis fails (separate threshold for France in the article).",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "2026 HRW buğday proteini %12,5 (2025: 12,1; 5 yıl ort. 12,3). Eşik: Kansas verimi ≥ 45 bu/akre ve HRW proteini ≥ %12,0.",
+"last_en": "2026 HRW wheat protein 12.5% (2025: 12.1; 5-yr avg 12.3). Threshold: Kansas yield ≥ 45 bu/acre and HRW protein ≥ 12.0%.",
+"last_src": "U.S. Wheat Associates"
 },
 {
 "id": "G31",
@@ -349,6 +412,9 @@
 "cond_en": "If the area grew by at least 10% in 2027 and the October 2027 premium stays at 1.5 or more, the hypothesis fails.",
 "status": "pending",
 "note": "",
-"note_en": ""
+"note_en": "",
+"last": "Ekim 2026 basmati primi ≈ 1,73 (taban fiyata oranı). Eşik: 2027 alanı ≥ %10 artmışken Ekim 2027 primi ≥ 1,5.",
+"last_en": "Basmati premium ≈ 1.73 in October 2026 (ratio to support price). Threshold: premium ≥ 1.5 in October 2027 with area up ≥ 10%.",
+"last_src": "Bu analizin hesabı (CMB, Hindistan hükümeti)"
 }
 ]

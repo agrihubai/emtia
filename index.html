@@ -186,6 +186,7 @@
   .ae-hyp td.ae-hyp-due { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .ae-hyp td.ae-hyp-claim { min-width: 14rem; }
   .ae-hyp td.ae-hyp-cond { min-width: 16rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ae-hyp td.ae-hyp-last { min-width: 16rem; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
   .ae-hyp td.ae-hyp-status { min-width: 9rem; font-size: var(--cds-font-size-caption); }
   .ae-pill { display: inline-block; padding: 1px var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); white-space: nowrap; }
   .ae-pill.is-hit { color: var(--color-ok); border-color: currentColor; }
@@ -321,8 +322,8 @@
 
   <section class="ae-section ae-card" id="karne">
     <h2 class="ae-h2"><span data-l="tr" lang="tr">Hipotez karnesi</span><span data-l="en" lang="en" hidden>Hypothesis scorecard</span></h2>
-    <p class="ae-note" data-l="tr" lang="tr">AgriHub-AI yazıları tahmin satmaz, ama sınanabilir hipotezler kurar: her birinde bir kontrol tarihi ve "şu olursa yanıldık" diyen bir yanılma koşulu var. Tarihi gelen her hipotez kontrol edilir ve sonucu burada, tuttuysa da tutmadıysa da aynı görünürlükte yazılır. Yalnızca yazıda açık bir yanılma koşulu olan hipotezler listelenir.</p>
-    <p class="ae-note" data-l="en" lang="en" hidden>AgriHub-AI articles don't sell forecasts, but they set testable hypotheses: each has a check date and a falsification condition that says "if this happens, we were wrong". Every hypothesis is checked when its date comes, and the result is shown here with the same prominence whether it held or not. Only hypotheses with an explicit falsification condition in the article are listed.</p>
+    <p class="ae-note" data-l="tr" lang="tr">AgriHub-AI yazıları tahmin satmaz, ama sınanabilir hipotezler kurar: her birinde bir kontrol tarihi ve "şu olursa yanıldık" diyen bir yanılma koşulu var. Tarihi gelen her hipotez kontrol edilir ve sonucu burada, tuttuysa da tutmadıysa da aynı görünürlükte yazılır. Yalnızca yazıda açık bir yanılma koşulu olan hipotezler listelenir. "Son bilinen değer", eşiğe bugün ne kadar uzak olunduğunu gösterir ve her yeni yazıda güncellenir.</p>
+    <p class="ae-note" data-l="en" lang="en" hidden>AgriHub-AI articles don't sell forecasts, but they set testable hypotheses: each has a check date and a falsification condition that says "if this happens, we were wrong". Every hypothesis is checked when its date comes, and the result is shown here with the same prominence whether it held or not. Only hypotheses with an explicit falsification condition in the article are listed. The "latest known value" shows how far things stand from the threshold today and is updated with each new article.</p>
     <div class="ae-score" data-source="scorecard">
       <span class="ae-score-item"><b data-draw="sc-hit" data-source="scorecard" data-field="hit" class="dash-skeleton">—</b><span data-l="tr" lang="tr">tuttu</span><span data-l="en" lang="en" hidden>held</span></span>
       <span class="ae-score-item"><b data-draw="sc-partial" data-source="scorecard" data-field="partial" class="dash-skeleton">—</b><span data-l="tr" lang="tr">kısmen</span><span data-l="en" lang="en" hidden>partly</span></span>
@@ -338,6 +339,7 @@
             <th data-field="due"><span data-l="tr" lang="tr">Kontrol tarihi</span><span data-l="en" lang="en" hidden>Check date</span></th>
             <th data-field="claim"><span data-l="tr" lang="tr">Hipotez</span><span data-l="en" lang="en" hidden>Hypothesis</span></th>
             <th data-field="cond"><span data-l="tr" lang="tr">Yanılma koşulu</span><span data-l="en" lang="en" hidden>Falsification condition</span></th>
+            <th data-field="last"><span data-l="tr" lang="tr">Son bilinen değer</span><span data-l="en" lang="en" hidden>Latest known value</span></th>
             <th data-field="status"><span data-l="tr" lang="tr">Durum</span><span data-l="en" lang="en" hidden>Status</span></th>
           </tr>
         </thead>
@@ -755,6 +757,9 @@
       if (h.interim === true || h.interim === 'true') tag.append(document.createTextNode(en ? ' · interim check' : ' · ara kontrol'));
       c2.append(tag);
       td('ae-hyp-cond').textContent = AE.tx(h, 'cond');
+      const cl = td('ae-hyp-last');
+      cl.append(document.createTextNode(AE.tx(h, 'last') || '—'));
+      if (h.last_src) { const sp = document.createElement('span'); sp.className = 'ae-hyp-tag'; sp.textContent = (en ? 'Source: ' : 'Kaynak: ') + h.last_src; cl.append(sp); }
       const c4 = td('ae-hyp-status');
       const pill = document.createElement('span');
       pill.className = 'ae-pill is-' + (label[h.status] ? h.status : 'pending');
