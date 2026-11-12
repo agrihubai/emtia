@@ -3,21 +3,33 @@ name: Fiyatları güncelle
 on:
   schedule:
     - cron: "17 6 * * 1"   # her pazartesi 06:17 UTC
+    - cron: "17 6 * * 4"   # her perşembe 06:17 UTC (pazartesi koşusu düşerse yedek)
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
+concurrency:
+  group: fiyat-guncelle
+  cancel-in-progress: false
+
 jobs:
   guncelle:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: FRED'den indir
-        run: python scripts/update_prices.py
+      - name: FRED'den indir (3 tur, aralarında 5 dk)
+        run: |
+          for tur in 1 2 3; do
+            if python scripts/update_prices.py; then exit 0; fi
+            echo "Tur $tur başarısız."
+            [ "$tur" -lt 3 ] && sleep 300
+          done
+          exit 1
       - name: Değiştiyse kaydet
         run: |
           if git diff --quiet -- data/emtia-fiyatlari.json; then

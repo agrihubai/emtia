@@ -24,15 +24,19 @@ OUT = Path(__file__).resolve().parent.parent / "data" / "emtia-fiyatlari.json"
 def fetch(code: str) -> list[dict]:
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={code}&cosd={START}"
     req = urllib.request.Request(url, headers={"User-Agent": "agrihubai-emtia-updater/1.0"})
-    for attempt in range(3):
+    # FRED zaman zaman yavaş yanıt veriyor (9 Kasım 2026: read timeout).
+    # 5 deneme, artan bekleme: 10, 30, 60, 120 sn.
+    waits = [10, 30, 60, 120]
+    for attempt in range(len(waits) + 1):
         try:
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=120) as r:
                 text = r.read().decode("utf-8")
             break
-        except Exception:
-            if attempt == 2:
+        except Exception as e:
+            if attempt == len(waits):
                 raise
-            time.sleep(5)
+            print(f"{code}: deneme {attempt + 1} başarısız ({e}); {waits[attempt]} sn sonra tekrar", file=sys.stderr)
+            time.sleep(waits[attempt])
     rows = []
     reader = csv.reader(io.StringIO(text))
     header = next(reader)
