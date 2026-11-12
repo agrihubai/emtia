@@ -3,12 +3,9 @@ on: workflow_dispatch
 jobs:
   p:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
-      - run: |
-          t(){ echo "== $1"; curl -sS -m 40 -o /tmp/o -w "code=%{http_code} time=%{time_total}\n" "$1"; head -c 300 /tmp/o; echo; }
-          t "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PWHEAMTUSDM&cosd=2015-01-01"
-          t "https://api.db.nomics.world/v22/series/IMF/PCPS/M.W00.PWHEAMT.USD?observations=1&format=json"
-          t "https://api.db.nomics.world/v22/series/IMF/PCPS/M.W00.PFOOD.IX?observations=1"
-          t "https://api.db.nomics.world/v22/series/BLS/wp/WPU0652?observations=1"
-          t "https://api.imf.org/external/sdmx/2.1/data/PCPS/W00.PWHEAMT.USD.M?startPeriod=2026-01"
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - run: FORCE_FALLBACK=1 python scripts/update_prices.py
