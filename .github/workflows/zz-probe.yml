@@ -3,9 +3,11 @@ on: workflow_dispatch
 jobs:
   p:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
-        with: {python-version: "3.12"}
-      - run: FORCE_FALLBACK=1 python scripts/update_prices.py
+      - run: |
+          t(){ echo "== $1"; curl -sS -m 40 -H "Accept: $2" -o /tmp/o -w "code=%{http_code} size=%{size_download}\n" "$1"; head -c 700 /tmp/o | tr '\n' ' '; echo; echo "TAIL:"; tail -c 400 /tmp/o | tr '\n' ' '; echo; }
+          t "https://api.imf.org/external/sdmx/2.1/data/PCPS/W00.PWHEAMT.USD.M?startPeriod=2025-06" "application/vnd.sdmx.data+csv;version=1.0.0"
+          t "https://api.imf.org/external/sdmx/3.0/data/dataflow/IMF.RES/PCPS/+/W00.PWHEAMT.USD.M?c%5BTIME_PERIOD%5D=ge:2025-06" "application/vnd.sdmx.data+csv;version=2.0.0"
+          t "https://api.imf.org/external/sdmx/2.1/data/PCPS/W00.PFOOD.IX.M?startPeriod=2025-06" "application/vnd.sdmx.data+csv;version=1.0.0"
+          t "https://api.bls.gov/publicAPI/v1/timeseries/data/WPU0652" "application/json"
